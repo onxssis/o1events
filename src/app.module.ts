@@ -6,6 +6,7 @@ import * as Joi from '@hapi/joi';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { EventsModule } from './events/events.module';
+import { CategoriesModule } from './categories/categories.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { EventsModule } from './events/events.module';
       synchronize: true,
     } as any),
     EventsModule,
+    CategoriesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

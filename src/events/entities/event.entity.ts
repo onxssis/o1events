@@ -1,4 +1,16 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Category } from '@/categories/entities/category.entity';
+import slugify from 'slugify';
+import {
+  BeforeInsert,
+  BeforeUpdate,
+  Column,
+  CreateDateColumn,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 
 @Entity()
 export class Event {
@@ -28,4 +40,20 @@ export class Event {
 
   @Column({ default: false })
   premium: boolean;
+
+  @ManyToMany(() => Category)
+  @JoinTable()
+  categories: Category[];
+
+  @CreateDateColumn({ name: 'created_at' })
+  createdAt: Date;
+
+  @UpdateDateColumn({ name: 'updated_at' })
+  updatedAt: Date;
+
+  @BeforeInsert()
+  @BeforeUpdate()
+  slugify() {
+    this.slug = slugify(this.title);
+  }
 }

@@ -8,15 +8,15 @@ import {
 
 export class CreateEventDto {
   @IsString()
-  @Length(1)
+  @Length(4)
   readonly title: string;
 
   @IsString()
-  @Length(1)
+  @Length(4)
   readonly description: string;
 
   @IsString()
-  @Length(1)
+  @Length(2)
   readonly location: string;
 
   @IsOptional()
