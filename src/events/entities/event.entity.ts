@@ -29,11 +29,11 @@ export class Event {
   @Column()
   location: string;
 
-  @Column({ nullable: true })
-  lng?: number;
+  @Column({ nullable: true, type: 'real' })
+  lng?: string;
 
-  @Column({ nullable: true })
-  lat?: number;
+  @Column({ nullable: true, type: 'real' })
+  lat?: string;
 
   @Column({ nullable: true })
   logo: string;
@@ -41,7 +41,7 @@ export class Event {
   @Column({ default: false })
   premium: boolean;
 
-  @ManyToMany(() => Category)
+  @ManyToMany(() => Category, { eager: true, onDelete: 'CASCADE' })
   @JoinTable()
   categories: Category[];
 
@@ -54,6 +54,6 @@ export class Event {
   @BeforeInsert()
   @BeforeUpdate()
   slugify() {
-    this.slug = slugify(this.title);
+    this.slug = slugify(this.title, { lower: true });
   }
 }

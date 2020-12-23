@@ -1,20 +1,21 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { EventsService } from './events.service';
 import { EventsController } from './events.controller';
-import { Event } from './entities/event.entity';
 import { EventRepository } from './repositories/typeorm/event.repository';
+import { CategoriesModule } from '@/categories/categories.module';
 
-// const repoServiceProvider = {
-//   provide: 'EVENT_REPOSITORY',
-//   // useClass: true ? EventRepository : EventRepository,
-//   useFactory: (connection: Connection) => connection.getRepository(Event),
-//   inject: [() => getConnection()],
-// };
+const repoServiceProvider = [
+  {
+    provide: 'EVENT_REPOSITORY',
+    useClass: EventRepository,
+    // useFactory: () => new EventRepository(getConnection()),
+    inject: [],
+  },
+];
 
 @Module({
-  imports: [TypeOrmModule.forFeature([EventRepository])],
+  imports: [CategoriesModule],
   controllers: [EventsController],
-  providers: [EventsService],
+  providers: [EventsService, ...repoServiceProvider],
 })
 export class EventsModule {}

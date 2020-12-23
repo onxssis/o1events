@@ -6,6 +6,8 @@ import {
   Put,
   Param,
   Delete,
+  ConflictException,
+  NotFoundException,
 } from '@nestjs/common';
 import { EventsService } from './events.service';
 import { CreateEventDto } from './dto/create-event.dto';
@@ -16,8 +18,18 @@ export class EventsController {
   constructor(private readonly eventsService: EventsService) {}
 
   @Post()
-  create(@Body() createEventDto: CreateEventDto) {
-    return this.eventsService.create(createEventDto);
+  async create(@Body() createEventDto: CreateEventDto) {
+    try {
+      const event = await this.eventsService.create(createEventDto);
+
+      return event;
+    } catch (error) {
+      if (error.code === '23505') {
+        throw new ConflictException();
+      }
+
+      throw error;
+    }
   }
 
   @Get()
@@ -25,14 +37,25 @@ export class EventsController {
     return this.eventsService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.eventsService.findOne(+id);
+  @Get(':slug')
+  async findOne(@Param('slug') slug: string) {
+    try {
+      return await this.eventsService.findOneBySlug(slug);
+    } catch (e) {
+      throw new NotFoundException();
+    }
   }
 
   @Put(':id')
-  update(@Param('id') id: string, @Body() updateEventDto: UpdateEventDto) {
-    return this.eventsService.update(+id, updateEventDto);
+  async update(
+    @Param('id') id: string,
+    @Body() updateEventDto: UpdateEventDto,
+  ) {
+    try {
+      return await this.eventsService.update(+id, updateEventDto);
+    } catch (e) {
+      throw new NotFoundException();
+    }
   }
 
   @Delete(':id')

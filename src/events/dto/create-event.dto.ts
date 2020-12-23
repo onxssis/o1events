@@ -1,9 +1,11 @@
+import { Category } from '@/categories/entities/category.entity';
 import {
   IsLatitude,
   IsLongitude,
   Length,
   IsOptional,
   IsString,
+  IsNumber,
 } from 'class-validator';
 
 export class CreateEventDto {
@@ -26,4 +28,7 @@ export class CreateEventDto {
   @IsOptional()
   @IsLongitude()
   readonly lng?: string;
+
+  @IsNumber({}, { each: true })
+  readonly categories: any[];
 }
