@@ -1,5 +1,3 @@
-import { Category } from '@/categories/entities/category.entity';
-import slugify from 'slugify';
 import {
   BeforeInsert,
   BeforeUpdate,
@@ -11,12 +9,13 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import slugify from 'slugify';
+
+import { Category } from '@/categories/entities/category.entity';
+import { CoreEntity } from '@/common/entities/core.entity';
 
 @Entity()
-export class Event {
-  @PrimaryGeneratedColumn()
-  id: number;
-
+export class Event extends CoreEntity {
   @Column()
   title: string;
 
@@ -44,12 +43,6 @@ export class Event {
   @ManyToMany(() => Category, { eager: true, onDelete: 'CASCADE' })
   @JoinTable()
   categories: Category[];
-
-  @CreateDateColumn({ name: 'created_at' })
-  createdAt: Date;
-
-  @UpdateDateColumn({ name: 'updated_at' })
-  updatedAt: Date;
 
   @BeforeInsert()
   @BeforeUpdate()

@@ -7,6 +7,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { EventsModule } from './events/events.module';
 import { CategoriesModule } from './categories/categories.module';
+import { CommonModule } from './common/common.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { CategoriesModule } from './categories/categories.module';
     } as any),
     EventsModule,
     CategoriesModule,
+    CommonModule,
   ],
   controllers: [AppController],
   providers: [AppService],
