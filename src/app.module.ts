@@ -8,6 +8,7 @@ import { AppService } from './app.service';
 import { EventsModule } from './events/events.module';
 import { CategoriesModule } from './categories/categories.module';
 import { CommonModule } from './common/common.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { CommonModule } from './common/common.module';
     EventsModule,
     CategoriesModule,
     CommonModule,
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
