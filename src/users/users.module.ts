@@ -12,7 +12,8 @@ const repoServiceProvider = [
 ];
 
 @Module({
-  providers: [UsersService, ...repoServiceProvider],
+  providers: [UsersService, ...repoServiceProvider, UserRepository],
   controllers: [UsersController],
+  exports: [UsersService, UserRepository],
 })
 export class UsersModule {}

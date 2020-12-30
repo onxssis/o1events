@@ -15,8 +15,8 @@ export class UserRepository implements IUserRepository {
     return this.repo.find({});
   }
 
-  async findOne(id: number) {
-    return this.repo.findOneOrFail(id);
+  async findOne(options: any) {
+    return this.repo.findOne(options);
   }
 
   // async findOneBySlug(slug: string) {

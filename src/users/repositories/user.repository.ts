@@ -5,7 +5,7 @@ export interface IUserRepository {
 
   create(createUserDto: any): Promise<User>;
 
-  findOne(id: number): Promise<User>;
+  findOne(options: any): Promise<User | null>;
 
   // findOneBySlug(slug: string): Promise<User>;
 
