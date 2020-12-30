@@ -10,6 +10,7 @@ import { CategoriesModule } from './categories/categories.module';
 import { CommonModule } from './common/common.module';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
+import { JwtModule } from './jwt/jwt.module';
 
 @Module({
   imports: [
@@ -39,6 +40,7 @@ import { AuthModule } from './auth/auth.module';
     CommonModule,
     UsersModule,
     AuthModule,
+    JwtModule,
   ],
   controllers: [AppController],
   providers: [AppService],
