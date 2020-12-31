@@ -32,10 +32,19 @@ export class Event extends CoreEntity {
   lat?: string;
 
   @Column({ nullable: true })
-  logo: string;
+  cover: string;
 
   @Column({ default: false })
   premium: boolean;
+
+  @Column({ type: 'timestamp', name: 'start_date' })
+  startDate: Date;
+
+  @Column({ type: 'timestamp', name: 'end_date' })
+  endDate: Date;
+
+  @Column({ default: 0 })
+  price: number;
 
   @ManyToMany(() => Category, { eager: true, onDelete: 'CASCADE' })
   @JoinTable()

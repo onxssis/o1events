@@ -6,6 +6,7 @@ import {
   IsOptional,
   IsString,
   IsNumber,
+  IsDateString,
 } from 'class-validator';
 
 export class CreateEventDto {
@@ -21,13 +22,21 @@ export class CreateEventDto {
   @Length(2)
   readonly location: string;
 
-  @IsOptional()
   @IsLatitude()
-  readonly lat?: string;
+  readonly lat: string;
+
+  @IsLongitude()
+  readonly lng: string;
 
   @IsOptional()
-  @IsLongitude()
-  readonly lng?: string;
+  @IsNumber()
+  readonly price?: number;
+
+  @IsDateString()
+  readonly startDate: Date;
+
+  @IsDateString()
+  readonly endDate: Date;
 
   @IsNumber({}, { each: true })
   readonly categories: any[];
