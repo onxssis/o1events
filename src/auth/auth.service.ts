@@ -19,8 +19,8 @@ export class AuthService {
       const passwordValid = await this.validPassword(password, user.password);
 
       if (passwordValid) {
-        user.password = undefined;
-        return user;
+        const { password: _, ...userResult } = user;
+        return userResult;
       }
 
       return null;
@@ -32,7 +32,7 @@ export class AuthService {
     }
   }
 
-  async login(user: User) {
+  async login(user: Partial<User>) {
     const payload = { email: user.email, sub: user.id };
 
     return {
