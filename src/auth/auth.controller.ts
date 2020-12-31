@@ -3,15 +3,24 @@ import { UsersService } from '@/users/users.service';
 import {
   Body,
   Controller,
+  Get,
   HttpException,
   HttpStatus,
   Post,
+  Request,
+  UseGuards,
 } from '@nestjs/common';
+import { AuthService } from './auth.service';
 import { AuthenticateUserDto } from './dto/authuser.dto';
+import { JwtAuthGuard } from './guards/jwt.guard';
+import { LocalAuthGuard } from './guards/local-auth.guard';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private userService: UsersService) {}
+  constructor(
+    private authService: AuthService,
+    private userService: UsersService,
+  ) {}
 
   @Post('register')
   async create(@Body() createUserDto: CreateUserDto) {
@@ -24,8 +33,15 @@ export class AuthController {
     }
   }
 
+  @UseGuards(LocalAuthGuard)
   @Post('login')
-  async login(@Body() authDto: AuthenticateUserDto) {
-    return await this.userService.authenticateUser(authDto);
+  async login(@Request() req) {
+    return this.authService.login(req.user);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('profile')
+  getProfile(@Request() req) {
+    return req.user;
   }
 }

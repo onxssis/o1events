@@ -10,7 +10,6 @@ import { CategoriesModule } from './categories/categories.module';
 import { CommonModule } from './common/common.module';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
-import { JwtModule } from './jwt/jwt.module';
 
 @Module({
   imports: [
@@ -23,7 +22,9 @@ import { JwtModule } from './jwt/jwt.module';
         DB_USERNAME: Joi.required(),
         DB_PASSWORD: Joi.required(),
         DB_PORT: Joi.required(),
+        JWT_PRIVATE_KEY: Joi.required(),
       }),
+      cache: process.env.NODE_ENV === 'production',
     }),
     TypeOrmModule.forRoot({
       type: process.env.DB_CONNECTION,
@@ -40,7 +41,6 @@ import { JwtModule } from './jwt/jwt.module';
     CommonModule,
     UsersModule,
     AuthModule,
-    JwtModule,
   ],
   controllers: [AppController],
   providers: [AppService],
