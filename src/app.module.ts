@@ -8,6 +8,9 @@ import { CategoriesModule } from './categories/categories.module';
 import { CommonModule } from './common/common.module';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
+import { Event } from './events/entities/event.entity';
+import { Category } from './categories/entities/category.entity';
+import { User } from './users/entities/user.entity';
 
 @Module({
   imports: [
@@ -25,15 +28,15 @@ import { AuthModule } from './auth/auth.module';
       cache: process.env.NODE_ENV === 'production',
     }),
     TypeOrmModule.forRoot({
-      type: process.env.DB_CONNECTION,
+      type: 'postgres',
       host: process.env.DB_HOST,
-      port: process.env.DB_PORT,
+      port: +process.env.DB_PORT,
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE,
-      entities: ['dist/**/*.entity{.ts,.js}'],
-      synchronize: false,
-    } as any),
+      entities: [Event, Category, User],
+      synchronize: process.env.NODE_ENV !== 'production',
+    }),
     EventsModule,
     CategoriesModule,
     CommonModule,

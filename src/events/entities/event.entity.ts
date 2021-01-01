@@ -37,10 +37,10 @@ export class Event extends CoreEntity {
   @Column({ default: false })
   premium: boolean;
 
-  @Column({ type: 'timestamp', name: 'start_date' })
+  @Column({ type: 'timestamp', name: 'start_date', default: 'NOW()' })
   startDate: Date;
 
-  @Column({ type: 'timestamp', name: 'end_date' })
+  @Column({ type: 'timestamp', name: 'end_date', default: 'NOW()' })
   endDate: Date;
 
   @Column({ default: 0 })

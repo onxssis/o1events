@@ -1,0 +1,47 @@
+version: "3.8"
+
+services:
+  app:
+    container_name: eventbostest
+    build:
+      context: .
+      dockerfile: Dockerfile.test
+      target: eventbostest # only build this part of the Dockerfile (see: '... As example' )
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules # 'hack' prevents node_modules/ in the container from being overridden
+    working_dir: /usr/src/app
+    command: yarn test:e2e
+    environment:
+      PORT: 3500
+      NODE_ENV: test
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_DATABASE: eventbostest
+      DB_USERNAME: postgres
+      DB_PASSWORD: postgres
+    networks:
+      - testnet
+    depends_on:
+      - postgres
+
+  postgres:
+    container_name: postgres
+    image: postgres
+    networks:
+      - testnet
+    environment:
+      POSTGRES_DB: eventbostest
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      PG_DATA: /var/lib/postgresql/data
+    volumes:
+      # - ./seed.db.sql:/docker-entrypoint-initdb.d/db.sql <- run only once when the pgdata volume is first created (when run via docker-compose)
+      - pgdata:/var/lib/postgresql/data # or specify a local folder like ./docker-volumes/pgdata:/var/lib/postgresql/data
+
+networks:
+  testnet:
+
+volumes:
+  pgdata:
+  logs:
