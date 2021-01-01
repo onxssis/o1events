@@ -58,5 +58,39 @@ describe('UsersService', () => {
         async () => await service.createUser(createAccountArgs),
       ).rejects.toThrowError(ConflictException);
     });
+
+    it('should create a new user account', async () => {
+      usersRepository.create.mockResolvedValue(createAccountArgs);
+
+      const user = await service.createUser(createAccountArgs);
+
+      expect(user).toEqual(expect.objectContaining(createAccountArgs));
+    });
+
+    it('should find a user by email', async () => {
+      const result = {
+        id: 1,
+        email: createAccountArgs.email,
+      };
+      usersRepository.findOne.mockResolvedValue(result);
+
+      const user = await service.getByEmail(createAccountArgs.email);
+
+      expect(usersRepository.findOne).toHaveBeenCalledTimes(1);
+      expect(result).toMatchObject(user);
+    });
+
+    it('should find a user by id', async () => {
+      const result = {
+        id: 2,
+        email: 'reandomuse@emai.com',
+      };
+      usersRepository.findOne.mockResolvedValue(result);
+
+      const user = await service.findOne(2);
+
+      expect(usersRepository.findOne).toHaveBeenCalledTimes(1);
+      expect(result).toMatchObject(user);
+    });
   });
 });

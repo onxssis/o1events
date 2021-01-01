@@ -33,10 +33,10 @@ export class CreateEventDto {
   readonly price?: number;
 
   @IsDateString()
-  readonly startDate: Date;
+  readonly startDate: Date | string;
 
   @IsDateString()
-  readonly endDate: Date;
+  readonly endDate: Date | string;
 
   @IsNumber({}, { each: true })
   readonly categories: any[];

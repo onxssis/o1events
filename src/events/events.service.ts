@@ -1,13 +1,13 @@
+import { EVENT_REPOSITORY } from '@/common/common.constants';
 import { Inject, Injectable } from '@nestjs/common';
 import { CreateEventDto } from './dto/create-event.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
 import { IEventRepository } from './repositories/event.repository';
-import { EventRepository } from './repositories/typeorm/event.repository';
 
 @Injectable()
 export class EventsService {
   constructor(
-    @Inject('EVENT_REPOSITORY')
+    @Inject(EVENT_REPOSITORY)
     private eventRepository: IEventRepository,
   ) {}
 
