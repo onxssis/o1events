@@ -8,10 +8,15 @@ import {
   Delete,
   ConflictException,
   NotFoundException,
+  Query,
 } from '@nestjs/common';
 import { EventsService } from './events.service';
 import { CreateEventDto } from './dto/create-event.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
+import {
+  PaginatedResultDto,
+  PaginationQueryDto,
+} from '@/common/dto/pagination.dto';
 
 @Controller('events')
 export class EventsController {
@@ -33,8 +38,10 @@ export class EventsController {
   }
 
   @Get()
-  findAll() {
-    return this.eventsService.findAll();
+  async findAll(
+    @Query() paginationDto: PaginationQueryDto,
+  ): Promise<PaginatedResultDto> {
+    return await this.eventsService.findAll(paginationDto);
   }
 
   @Get(':slug')

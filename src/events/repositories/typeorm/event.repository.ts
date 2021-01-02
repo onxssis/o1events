@@ -4,6 +4,10 @@ import { IEventRepository } from '../event.repository';
 import { CreateEventDto } from '@/events/dto/create-event.dto';
 import { CategoriesService } from '@/categories/categories.service';
 import { UpdateEventDto } from '@/events/dto/update-event.dto';
+import {
+  PaginatedResultDto,
+  PaginationQueryDto,
+} from '@/common/dto/pagination.dto';
 
 @EntityRepository(Event)
 export class EventRepository implements IEventRepository {
@@ -16,8 +20,22 @@ export class EventRepository implements IEventRepository {
     return this.connection.getRepository(Event);
   }
 
-  async findAll() {
-    return this.repo.find({});
+  async findAll(
+    paginationDto: PaginationQueryDto,
+  ): Promise<PaginatedResultDto> {
+    const { limit, page = 1 } = paginationDto;
+    const skip = (page - 1) * limit;
+    const totalCount = await this.repo.count();
+
+    const data = await this.repo.find({ skip, take: limit });
+
+    return {
+      totalCount,
+      page,
+      perPage: limit,
+      data,
+      hasMorePages: totalCount > limit,
+    };
   }
 
   async findOne(id: number) {

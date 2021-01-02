@@ -1,4 +1,8 @@
 import { EVENT_REPOSITORY } from '@/common/common.constants';
+import {
+  PaginatedResultDto,
+  PaginationQueryDto,
+} from '@/common/dto/pagination.dto';
 import { Inject, Injectable } from '@nestjs/common';
 import { CreateEventDto } from './dto/create-event.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
@@ -6,6 +10,8 @@ import { IEventRepository } from './repositories/event.repository';
 
 @Injectable()
 export class EventsService {
+  static PAGINATION_LIMIT = 25;
+
   constructor(
     @Inject(EVENT_REPOSITORY)
     private eventRepository: IEventRepository,
@@ -15,8 +21,13 @@ export class EventsService {
     return this.eventRepository.create(createEventDto);
   }
 
-  findAll() {
-    return this.eventRepository.findAll();
+  async findAll(
+    paginationDto: PaginationQueryDto,
+  ): Promise<PaginatedResultDto> {
+    return this.eventRepository.findAll({
+      ...paginationDto,
+      limit: paginationDto?.limit || EventsService.PAGINATION_LIMIT,
+    });
   }
 
   async findOne(id: number) {

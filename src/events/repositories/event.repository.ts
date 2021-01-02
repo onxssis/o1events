@@ -1,9 +1,13 @@
+import {
+  PaginatedResultDto,
+  PaginationQueryDto,
+} from '@/common/dto/pagination.dto';
 import { CreateEventDto } from '../dto/create-event.dto';
 import { UpdateEventDto } from '../dto/update-event.dto';
 import { Event } from '../entities/event.entity';
 
 export interface IEventRepository {
-  findAll(): Promise<Event[]>;
+  findAll(options?: PaginationQueryDto): Promise<PaginatedResultDto>;
 
   create(createEventDto: CreateEventDto): Promise<Event>;
 

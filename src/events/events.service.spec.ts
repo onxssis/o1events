@@ -68,10 +68,14 @@ describe('EventsService', () => {
 
   it('should call the findAll method of the event repository', async () => {
     (eventRepository as any).findAll.mockReturnValue([]);
+    const paginationQuery = { page: 1, limit: 25 };
 
-    const events = await service.findAll();
+    const events = await service.findAll(paginationQuery);
 
     expect((eventRepository as any).findAll).toHaveBeenCalledTimes(1);
+    expect((eventRepository as any).findAll).toHaveBeenCalledWith(
+      paginationQuery,
+    );
     expect(events).toHaveLength(0);
   });
 
