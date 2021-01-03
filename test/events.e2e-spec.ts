@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication } from '@nestjs/common';
+import { HttpStatus, INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from './../src/app.module';
 import * as utils from './utils';
@@ -24,7 +24,33 @@ describe('EventsController (e2e)', () => {
     await app.close();
   });
 
-  it('/events (GET)', () => {
-    return request(app.getHttpServer()).get('/events').expect(200).expect([]);
+  describe('', () => {
+    const event = {
+      title: 'Exchanges Dev Summit II',
+      description: 'sdmh sfjd the reload',
+      location: 'doewb4r9o23 34334r4',
+      lng: 4.322,
+      lat: -1.23433,
+      categories: [],
+      startDate: '2021-01-02T16:35:22.251Z',
+      endDate: '2021-01-02T16:35:22.251Z',
+    };
+
+    it('/events (GET)', async () => {
+      const response = await request(app.getHttpServer())
+        .get('/events')
+        .expect(200);
+      expect(response.body.data).toEqual([]);
+    });
+
+    it('should not allow unauthenticated user create event', async () => {
+      const response = await request(app.getHttpServer())
+        .post('/events')
+        .set('Accept', 'application/json')
+        .send(event)
+        .expect(HttpStatus.UNAUTHORIZED);
+
+      expect(response.body.message).toEqual('Unauthorized');
+    });
   });
 });
