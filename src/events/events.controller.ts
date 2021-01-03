@@ -20,6 +20,7 @@ import {
 } from '@/common/dto/pagination.dto';
 import { AdminGuard } from '@/common/guards/admin.guard';
 import { AuthGuard } from '@/auth/guards/jwt.guard';
+import { FilterQueryDto } from '@/common/dto/filter.dto';
 
 @Controller('events')
 export class EventsController {
@@ -46,6 +47,14 @@ export class EventsController {
     @Query() paginationDto: PaginationQueryDto,
   ): Promise<PaginatedResultDto> {
     return await this.eventsService.findAll(paginationDto);
+  }
+
+  @Get('search')
+  async search(
+    @Query() filterDto: FilterQueryDto,
+    @Query() paginationDto: PaginationQueryDto,
+  ) {
+    console.log({ ...filterDto, ...paginationDto });
   }
 
   @Get(':slug')
