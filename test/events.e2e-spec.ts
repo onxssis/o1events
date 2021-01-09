@@ -1,12 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { HttpStatus, INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
-import { factory, FactoryModule } from 'typeorm-factories';
+import { factory, FactoryModule } from '@/factory';
 
 import { AppModule } from './../src/app.module';
 import * as utils from './utils';
-import { User } from '@/users/entities/user.entity';
-import { populateEvents } from './helpers';
 import { Event } from '@/events/entities/event.entity';
 
 describe('EventsController (e2e)', () => {
@@ -31,7 +29,7 @@ describe('EventsController (e2e)', () => {
 
   describe('Events Tests', () => {
     it('should return a list of events', async () => {
-      await populateEvents();
+      await factory(Event).createMany(2);
 
       const response = await request(app.getHttpServer())
         .get('/events')
@@ -40,7 +38,7 @@ describe('EventsController (e2e)', () => {
     });
 
     it('should return a list of paginated events', async () => {
-      await populateEvents();
+      await factory(Event).createMany(2);
 
       const response = await request(app.getHttpServer())
         .get('/events?limit=1&page=1')

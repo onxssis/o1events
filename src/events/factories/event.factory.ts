@@ -1,6 +1,6 @@
 import * as Faker from 'faker';
 import slugify from 'slugify';
-import { define } from 'typeorm-factories';
+import { define } from '@/factory';
 import { Event } from '../entities/event.entity';
 
 define(Event, (faker: typeof Faker) => {

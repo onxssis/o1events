@@ -1,6 +1,6 @@
 import * as bcrypt from 'bcrypt';
 import { getRepository } from 'typeorm';
-import { factory } from 'typeorm-factories';
+import { factory } from '@/factory';
 
 import { Event } from '@/events/entities/event.entity';
 import { User } from '@/users/entities/user.entity';
