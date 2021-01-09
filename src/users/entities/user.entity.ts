@@ -1,4 +1,5 @@
-import { Column, Entity } from 'typeorm';
+import { BeforeInsert, BeforeUpdate, Column, Entity } from 'typeorm';
+import * as bcrypt from 'bcrypt';
 
 import { CoreEntity } from '@/common/entities/core.entity';
 
@@ -15,4 +16,20 @@ export class User extends CoreEntity {
 
   @Column({ default: false })
   is_admin: boolean;
+
+  // private tempPassword: string;
+
+  // @AfterLoad()
+  // private loadTempPassword(): void {
+  //   this.tempPassword = this.password;
+  // }
+
+  @BeforeInsert()
+  @BeforeUpdate()
+  private hashPassword(): void {
+    if (this.password) {
+      this.password = bcrypt.hashSync(this.password, 10);
+      // this.loadTempPassword();
+    }
+  }
 }

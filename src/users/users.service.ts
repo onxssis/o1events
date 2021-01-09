@@ -20,12 +20,7 @@ export class UsersService {
       throw new ConflictException('User already exists');
     }
 
-    const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
-
-    return this.userRespository.create({
-      ...createUserDto,
-      password: hashedPassword,
-    });
+    return this.userRespository.create(createUserDto);
   }
 
   async getByEmail(email: string) {

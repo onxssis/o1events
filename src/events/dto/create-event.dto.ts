@@ -7,6 +7,7 @@ import {
   IsString,
   IsNumber,
   IsDateString,
+  IsArray,
 } from 'class-validator';
 
 export class CreateEventDto {
@@ -38,6 +39,6 @@ export class CreateEventDto {
   @IsDateString()
   readonly endDate: Date | string;
 
-  @IsNumber({}, { each: true })
+  @IsArray()
   readonly categories: any[];
 }

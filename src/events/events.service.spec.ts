@@ -1,9 +1,6 @@
-import { EVENT_REPOSITORY, USER_REPOSITORY } from '@/common/common.constants';
-import { ConflictException } from '@nestjs/common';
+import { EVENT_REPOSITORY } from '@/common/common.constants';
 import { Test, TestingModule } from '@nestjs/testing';
 import { Repository } from 'typeorm';
-import { EventRepository } from './repositories/typeorm/event.repository';
-import { IEventRepository } from './repositories/event.repository';
 import { EventsService } from './events.service';
 
 const mockEventRepository = () => ({
