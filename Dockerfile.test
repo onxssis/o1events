@@ -1,12 +1,4 @@
-FROM node:alpine As eventbostest
-
-# install build dependencies
-RUN apk update && apk upgrade
-RUN apk add python3 g++ make
-
-# # install packages for sending mail (msmtp = sendmail for alpine)
-# RUN apk add msmtp
-# RUN ln -sf /usr/bin/msmtp /usr/sbin/sendmail
+FROM node:12 As eventbostest
 
 # make target directory for assigning permissions
 RUN mkdir -p /usr/src/app/node_modules

@@ -1,9 +1,9 @@
-import { getConnection } from 'typeorm';
+import { createConnection, getConnection } from 'typeorm';
 
 export const emptyDBTables = async () => {
   const connection = getConnection();
-  // await connection.dropDatabase();
-  // await connection.synchronize();
+  await connection.dropDatabase();
+  await connection.synchronize();
   // const entities = connection.entityMetadatas;
 
   // // await connection.query('SET FOREIGN_KEY_CHECKS=0;');
