@@ -18,5 +18,6 @@ const repoServiceProvider = [
   imports: [CategoriesModule],
   controllers: [EventsController],
   providers: [EventsService, ...repoServiceProvider],
+  exports: [EventsService],
 })
 export class EventsModule {}

@@ -21,7 +21,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     const user = await this.userService.findOne(payload.sub);
 
     if (user) {
-      user.password = undefined;
       return user;
     }
 

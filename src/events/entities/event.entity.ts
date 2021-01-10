@@ -12,6 +12,7 @@ import slugify from 'slugify';
 import { Category } from '@/categories/entities/category.entity';
 import { CoreEntity } from '@/common/entities/core.entity';
 import { Reservation } from '@/reservations/entities/reservation.entity';
+import { Expose } from 'class-transformer';
 
 @Entity()
 export class Event extends CoreEntity {
@@ -53,9 +54,10 @@ export class Event extends CoreEntity {
   categories: Category[];
 
   @OneToMany(() => Reservation, (reservation) => reservation.event, {
+    eager: true,
     onDelete: 'CASCADE',
   })
-  public reservations: Reservation[];
+  reservations: Reservation[];
 
   @BeforeInsert()
   @BeforeUpdate()

@@ -1,4 +1,4 @@
-import { Connection, EntityRepository } from 'typeorm';
+import { Connection, EntityRepository, LessThan, MoreThan } from 'typeorm';
 import { Event } from '@/events/entities/event.entity';
 import { IEventRepository } from '../event.repository';
 import { CreateEventDto } from '@/events/dto/create-event.dto';
@@ -8,13 +8,11 @@ import {
   PaginatedResultDto,
   PaginationQueryDto,
 } from '@/common/dto/pagination.dto';
+import { Category } from '@/categories/entities/category.entity';
 
 @EntityRepository(Event)
 export class EventRepository implements IEventRepository {
-  constructor(
-    private connection: Connection,
-    private categoryService: CategoriesService,
-  ) {}
+  constructor(private connection: Connection) {}
 
   get repo() {
     return this.connection.getRepository(Event);
@@ -25,9 +23,13 @@ export class EventRepository implements IEventRepository {
   ): Promise<PaginatedResultDto> {
     const { limit, page = 1 } = paginationDto;
     const skip = (page - 1) * limit;
-    const totalCount = await this.repo.count();
 
-    const data = await this.repo.find({ skip, take: limit });
+    const [data, totalCount] = await this.repo
+      .createQueryBuilder('event')
+      .loadRelationCountAndMap('event.reservationsCount', 'event.reservations')
+      .skip(skip)
+      .take(limit)
+      .getManyAndCount();
 
     return {
       totalCount,
@@ -38,6 +40,20 @@ export class EventRepository implements IEventRepository {
     };
   }
 
+  async getUpcomingEvents(limit = 5) {
+    return this.repo.find({
+      where: { startDate: MoreThan(new Date()) },
+      take: limit,
+    });
+  }
+
+  async getPastEvents(limit = 5) {
+    return this.repo.find({
+      where: { startDate: LessThan(new Date()) },
+      take: limit,
+    });
+  }
+
   async findOne(id: number) {
     return this.repo.findOneOrFail(id);
   }
@@ -46,11 +62,7 @@ export class EventRepository implements IEventRepository {
     return this.repo.findOneOrFail({ slug });
   }
 
-  async create(createEventDto: CreateEventDto) {
-    const categories = await this.categoryService.findByIds(
-      createEventDto.categories,
-    );
-
+  async create(createEventDto: CreateEventDto, categories: Category[]) {
     const event = this.repo.create({ ...createEventDto, categories });
 
     return this.repo.save(event);

@@ -74,27 +74,27 @@ describe('CategoriesService', () => {
     expect(category).toBeNull();
   });
 
-  it('should call the delete method of the event repository', async () => {
+  it('should call the delete method of the category repository', async () => {
     categoryRepository.delete.mockReturnValue(null);
 
-    const event = await service.remove(1);
+    const category = await service.remove(1);
 
     expect(categoryRepository.delete).toHaveBeenCalledTimes(1);
-    expect(event).toBeNull();
+    expect(category).toBeNull();
   });
 
-  it('should call the update method of the event repository', async () => {
+  it('should call the update method of the category repository', async () => {
     categoryRepository.update.mockReturnValue({
       ...createCategoryArgs,
       name: 'update',
     });
     categoryRepository.findOne.mockReturnValue({});
 
-    const event = await service.update(1, createCategoryArgs);
+    const category = await service.update(1, createCategoryArgs);
 
     expect(categoryRepository.findOne).toHaveBeenCalledTimes(1);
     expect(categoryRepository.update).toHaveBeenCalledTimes(1);
-    expect(event).toEqual(
+    expect(category).toEqual(
       expect.objectContaining({ ...createCategoryArgs, name: 'update' }),
     );
   });

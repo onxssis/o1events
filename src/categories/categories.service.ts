@@ -1,3 +1,4 @@
+import { CATEGORY_REPOSITORY } from '@/common/common.constants';
 import { Inject, Injectable } from '@nestjs/common';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
@@ -6,7 +7,7 @@ import { ICategoryRepository } from './repositories/category.repository';
 @Injectable()
 export class CategoriesService {
   constructor(
-    @Inject('CATEGORY_REPOSITORY')
+    @Inject(CATEGORY_REPOSITORY)
     private categoryRepository: ICategoryRepository,
   ) {}
 

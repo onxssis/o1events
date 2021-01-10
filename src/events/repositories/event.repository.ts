@@ -1,3 +1,4 @@
+import { Category } from '@/categories/entities/category.entity';
 import {
   PaginatedResultDto,
   PaginationQueryDto,
@@ -9,7 +10,10 @@ import { Event } from '../entities/event.entity';
 export interface IEventRepository {
   findAll(options?: PaginationQueryDto): Promise<PaginatedResultDto>;
 
-  create(createEventDto: CreateEventDto): Promise<Event>;
+  create(
+    createEventDto: CreateEventDto,
+    categories: Category[],
+  ): Promise<Event>;
 
   findOne(id: number): Promise<Event>;
 

@@ -1,4 +1,9 @@
-import { EVENT_REPOSITORY } from '@/common/common.constants';
+import { CategoriesModule } from '@/categories/categories.module';
+import { CategoriesService } from '@/categories/categories.service';
+import {
+  CATEGORY_REPOSITORY,
+  EVENT_REPOSITORY,
+} from '@/common/common.constants';
 import { Test, TestingModule } from '@nestjs/testing';
 import { Repository } from 'typeorm';
 import { EventsService } from './events.service';
@@ -10,6 +15,10 @@ const mockEventRepository = () => ({
   delete: jest.fn(),
   findAll: jest.fn(),
   findOneBySlug: jest.fn(),
+});
+
+const mockCategoryRepository = () => ({
+  findByIds: jest.fn(),
 });
 
 type MockRepository<T = any> = Partial<Record<keyof Repository<T>, jest.Mock>>;
@@ -37,6 +46,11 @@ describe('EventsService', () => {
           provide: EVENT_REPOSITORY,
           useValue: mockEventRepository(),
         },
+        {
+          provide: CATEGORY_REPOSITORY,
+          useValue: mockCategoryRepository(),
+        },
+        CategoriesService,
       ],
     }).compile();
 

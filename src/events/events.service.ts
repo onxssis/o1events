@@ -1,3 +1,4 @@
+import { CategoriesService } from '@/categories/categories.service';
 import { EVENT_REPOSITORY } from '@/common/common.constants';
 import {
   PaginatedResultDto,
@@ -15,10 +16,15 @@ export class EventsService {
   constructor(
     @Inject(EVENT_REPOSITORY)
     private eventRepository: IEventRepository,
+    private categoryService: CategoriesService,
   ) {}
 
   async create(createEventDto: CreateEventDto) {
-    return this.eventRepository.create(createEventDto);
+    const categories = await this.categoryService.findByIds(
+      createEventDto.categories,
+    );
+
+    return this.eventRepository.create(createEventDto, categories);
   }
 
   async findAll(
