@@ -1,5 +1,3 @@
-import { AuthGuard } from '@/auth/guards/jwt.guard';
-import { AdminGuard } from '@/common/guards/admin.guard';
 import {
   Controller,
   Get,
@@ -13,13 +11,14 @@ import {
 import { CategoriesService } from './categories.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
+import { AdminRoute } from '@/common/decorators/admin-route.decorator';
 
 @Controller('categories')
 export class CategoriesController {
   constructor(private readonly categoriesService: CategoriesService) {}
 
   @Post()
-  @UseGuards(AuthGuard, AdminGuard)
+  @AdminRoute()
   create(@Body() createCategoryDto: CreateCategoryDto) {
     return this.categoriesService.create(createCategoryDto);
   }
@@ -35,7 +34,7 @@ export class CategoriesController {
   }
 
   @Put(':id')
-  @UseGuards(AuthGuard, AdminGuard)
+  @AdminRoute()
   update(
     @Param('id') id: string,
     @Body() updateCategoryDto: UpdateCategoryDto,
@@ -44,7 +43,7 @@ export class CategoriesController {
   }
 
   @Delete(':id')
-  @UseGuards(AuthGuard, AdminGuard)
+  @AdminRoute()
   remove(@Param('id') id: string) {
     return this.categoriesService.remove(+id);
   }

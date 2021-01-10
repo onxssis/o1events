@@ -5,11 +5,13 @@ import {
   Entity,
   JoinTable,
   ManyToMany,
+  OneToMany,
 } from 'typeorm';
 import slugify from 'slugify';
 
 import { Category } from '@/categories/entities/category.entity';
 import { CoreEntity } from '@/common/entities/core.entity';
+import { Reservation } from '@/reservations/entities/reservation.entity';
 
 @Entity()
 export class Event extends CoreEntity {
@@ -49,6 +51,11 @@ export class Event extends CoreEntity {
   @ManyToMany(() => Category, { eager: true, onDelete: 'CASCADE' })
   @JoinTable()
   categories: Category[];
+
+  @OneToMany(() => Reservation, (reservation) => reservation.event, {
+    onDelete: 'CASCADE',
+  })
+  public reservations: Reservation[];
 
   @BeforeInsert()
   @BeforeUpdate()

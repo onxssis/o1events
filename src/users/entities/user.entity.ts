@@ -1,7 +1,8 @@
-import { BeforeInsert, BeforeUpdate, Column, Entity } from 'typeorm';
+import { BeforeInsert, BeforeUpdate, Column, Entity, OneToMany } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 
 import { CoreEntity } from '@/common/entities/core.entity';
+import { Reservation } from '@/reservations/entities/reservation.entity';
 
 @Entity()
 export class User extends CoreEntity {
@@ -16,6 +17,11 @@ export class User extends CoreEntity {
 
   @Column({ default: false })
   is_admin: boolean;
+
+  @OneToMany(() => Reservation, (reservation) => reservation.user, {
+    onDelete: 'CASCADE',
+  })
+  public reservations: Reservation[];
 
   // private tempPassword: string;
 

@@ -11,6 +11,8 @@ import { AuthModule } from './auth/auth.module';
 import { Event } from './events/entities/event.entity';
 import { Category } from './categories/entities/category.entity';
 import { User } from './users/entities/user.entity';
+import { Reservation } from './reservations/entities/reservation.entity';
+import { ReservationsModule } from './reservations/reservations.module';
 
 @Module({
   imports: [
@@ -34,7 +36,7 @@ import { User } from './users/entities/user.entity';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE,
-      entities: [Event, Category, User],
+      entities: [Event, Category, User, Reservation],
       synchronize: process.env.NODE_ENV !== 'production',
     }),
     EventsModule,
@@ -42,6 +44,7 @@ import { User } from './users/entities/user.entity';
     CommonModule,
     UsersModule,
     AuthModule,
+    ReservationsModule,
   ],
 })
 export class AppModule {}

@@ -6,12 +6,10 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import slugify from 'slugify';
+import { CoreEntity } from '@/common/entities/core.entity';
 
 @Entity()
-export class Category {
-  @PrimaryGeneratedColumn()
-  id: number;
-
+export class Category extends CoreEntity {
   @Column()
   name: string;
 
