@@ -19,8 +19,7 @@ export class AuthService {
       const passwordValid = await this.validPassword(password, user.password);
 
       if (passwordValid) {
-        const { password: _, ...userResult } = user;
-        return userResult;
+        return user;
       }
 
       return null;

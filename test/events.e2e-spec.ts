@@ -30,60 +30,91 @@ describe('EventsController (e2e)', () => {
   });
 
   describe('Events Tests', () => {
-    it('should return a list of events', async () => {
-      await factory(Event).createMany(2);
+    describe('View/List Events Tests', () => {
+      it('should return a list of events', async () => {
+        await factory(Event).createMany(2);
 
-      const response = await request(app.getHttpServer())
-        .get('/events')
-        .expect(200);
-      expect(response.body.data).toHaveLength(2);
+        const response = await request(app.getHttpServer())
+          .get('/events')
+          .expect(200);
+        expect(response.body.data).toHaveLength(2);
+      });
+
+      it('should return a list of paginated events', async () => {
+        await factory(Event).createMany(2);
+
+        const response = await request(app.getHttpServer())
+          .get('/events?limit=1&page=1')
+          .expect(200);
+
+        expect(response.body.data).toHaveLength(1);
+        expect(response.body.hasMorePages).toBe(true);
+      });
     });
 
-    it('should return a list of paginated events', async () => {
-      await factory(Event).createMany(2);
+    describe('Create Events Tests', () => {
+      it('should not allow unauthenticated user create event', async () => {
+        const event = await factory(Event).make();
 
-      const response = await request(app.getHttpServer())
-        .get('/events?limit=1&page=1')
-        .expect(200);
+        const response = await request(app.getHttpServer())
+          .post('/events')
+          .set('Accept', 'application/json')
+          .send(event)
+          .expect(HttpStatus.UNAUTHORIZED);
 
-      expect(response.body.data).toHaveLength(1);
-      expect(response.body.hasMorePages).toBe(true);
-    });
+        expect(response.body.message).toEqual('Unauthorized');
+      });
 
-    it('should not allow unauthenticated user create event', async () => {
-      const event = await factory(Event).make();
+      it('should not allow non admin user create event', async () => {
+        const user = await factory(User).create({ password: 'pass@erd' });
+        const event = await factory(Event).make();
 
-      const response = await request(app.getHttpServer())
-        .post('/events')
-        .set('Accept', 'application/json')
-        .send(event)
-        .expect(HttpStatus.UNAUTHORIZED);
+        const response = await request(app.getHttpServer())
+          .post('/auth/login')
+          .set('Accept', 'application/json')
+          .send({ email: user.email, password: 'pass@erd' })
+          .expect(HttpStatus.CREATED);
 
-      expect(response.body.message).toEqual('Unauthorized');
-    });
+        expect(response.body.access_token).toBeTruthy();
 
-    it('should not allow non admin user create event', async () => {
-      const user = await factory(User).create({ password: 'pass@erd' });
-      const event = await factory(Event).make();
+        token = response.body.access_token;
 
-      const response = await request(app.getHttpServer())
-        .post('/auth/login')
-        .set('Accept', 'application/json')
-        .send({ email: user.email, password: 'pass@erd' })
-        .expect(HttpStatus.CREATED);
+        const eventResponse = await request(app.getHttpServer())
+          .post('/events')
+          .set('Accept', 'application/json')
+          .set('Authorization', `Bearer ${token}`)
+          .send(event)
+          .expect(HttpStatus.FORBIDDEN);
 
-      expect(response.body.access_token).toBeTruthy();
+        expect(eventResponse.body.message).toEqual('Forbidden resource');
+      });
 
-      token = response.body.access_token;
+      it('should allow admin user create event', async () => {
+        const user = await factory(User).create({
+          password: 'pass@erd',
+          is_admin: true,
+        });
+        const event = await factory(Event).make();
 
-      const eventResponse = await request(app.getHttpServer())
-        .post('/events')
-        .set('Accept', 'application/json')
-        .set('Authorization', `Bearer ${token}`)
-        .send(event)
-        .expect(HttpStatus.FORBIDDEN);
+        const response = await request(app.getHttpServer())
+          .post('/auth/login')
+          .set('Accept', 'application/json')
+          .send({ email: user.email, password: 'pass@erd' })
+          .expect(HttpStatus.CREATED);
 
-      expect(eventResponse.body.message).toEqual('Forbidden resource');
+        expect(response.body.access_token).toBeTruthy();
+
+        token = response.body.access_token;
+
+        const eventResponse = await request(app.getHttpServer())
+          .post('/events')
+          .set('Accept', 'application/json')
+          .set('Authorization', `Bearer ${token}`)
+          .send(event)
+          .expect(HttpStatus.CREATED);
+
+        expect(eventResponse.body.title).toEqual(event.title);
+      });
     });
   });
 });

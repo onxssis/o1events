@@ -3,6 +3,7 @@ import * as bcrypt from 'bcrypt';
 
 import { CoreEntity } from '@/common/entities/core.entity';
 import { Reservation } from '@/reservations/entities/reservation.entity';
+import { Exclude } from 'class-transformer';
 
 @Entity()
 export class User extends CoreEntity {
@@ -13,6 +14,7 @@ export class User extends CoreEntity {
   email: string;
 
   @Column()
+  @Exclude()
   password: string;
 
   @Column({ default: false })

@@ -26,6 +26,7 @@ export class EventRepository implements IEventRepository {
 
     const [data, totalCount] = await this.repo
       .createQueryBuilder('event')
+      .leftJoinAndSelect('event.categories', 'category')
       .loadRelationCountAndMap('event.reservationsCount', 'event.reservations')
       .skip(skip)
       .take(limit)
