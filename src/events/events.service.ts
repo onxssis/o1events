@@ -30,10 +30,7 @@ export class EventsService {
   async findAll(
     paginationDto: PaginationQueryDto,
   ): Promise<PaginatedResultDto> {
-    return this.eventRepository.findAll({
-      ...paginationDto,
-      limit: paginationDto?.limit || EventsService.PAGINATION_LIMIT,
-    });
+    return this.eventRepository.findAll(paginationDto);
   }
 
   async findOne(id: number) {

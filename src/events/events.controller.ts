@@ -9,8 +9,6 @@ import {
   ConflictException,
   NotFoundException,
   Query,
-  UseInterceptors,
-  ClassSerializerInterceptor,
 } from '@nestjs/common';
 import { EventsService } from './events.service';
 import { CreateEventDto } from './dto/create-event.dto';
@@ -46,6 +44,10 @@ export class EventsController {
   async findAll(
     @Query() paginationDto: PaginationQueryDto,
   ): Promise<PaginatedResultDto> {
+    paginationDto.page = Number(paginationDto.page) || 1;
+    paginationDto.limit =
+      Number(paginationDto.limit) || EventsService.PAGINATION_LIMIT;
+
     return await this.eventsService.findAll(paginationDto);
   }
 

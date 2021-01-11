@@ -5,17 +5,15 @@ import {
   HttpException,
   HttpStatus,
   Post,
-  Request,
   UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthGuard } from './guards/jwt.guard';
-import { LocalAuthGuard } from './guards/local-auth.guard';
-import RequestWithUser from '@/common/interfaces/request-user.interface';
 import { CreateUserDto } from '@/users/dto/create-user.dto';
 import { UsersService } from '@/users/users.service';
 import { Auth } from '@/common/decorators/auth-user.decorator';
 import { User } from '@/users/entities/user.entity';
+import { AuthenticateUserDto } from './dto/authuser.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -35,10 +33,18 @@ export class AuthController {
     }
   }
 
-  @UseGuards(LocalAuthGuard)
   @Post('login')
-  async login(@Request() req: RequestWithUser) {
-    return this.authService.login(req.user);
+  async login(@Body() loginDto: AuthenticateUserDto) {
+    const user = await this.authService.authenticateUser(loginDto);
+
+    if (!user) {
+      throw new HttpException(
+        'Invalid credentials provided',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    return this.authService.login(user);
   }
 
   @UseGuards(AuthGuard)

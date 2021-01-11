@@ -5,10 +5,10 @@ import { factory, FactoryModule } from '@/factory';
 
 import { AppModule } from './../src/app.module';
 import * as utils from './utils';
-import { Event } from '@/events/entities/event.entity';
 import { User } from '@/users/entities/user.entity';
+import { Category } from '@/categories/entities/category.entity';
 
-describe('EventsController (e2e)', () => {
+describe('CategoriesController (e2e)', () => {
   let app: INestApplication;
   let token: string;
 
@@ -30,80 +30,69 @@ describe('EventsController (e2e)', () => {
     await app.close();
   });
 
-  describe('Events Tests', () => {
-    it('should return a list of events', async () => {
-      await factory(Event).createMany(2);
+  describe('Categories Tests', () => {
+    it('should return a list of categories', async () => {
+      await factory(Category).createMany(2);
 
       const response = await request(app.getHttpServer())
-        .get('/events')
+        .get('/categories')
         .expect(200);
-      expect(response.body.data).toHaveLength(2);
+      expect(response.body).toHaveLength(2);
     });
 
-    it('should return a list of paginated events', async () => {
-      await factory(Event).createMany(2);
+    it('should not allow unauthenticated user create category', async () => {
+      const category = await factory(Category).make();
 
       const response = await request(app.getHttpServer())
-        .get('/events?limit=1&page=1')
-        .expect(200);
-
-      expect(response.body.data).toHaveLength(1);
-      expect(response.body.hasMorePages).toBe(true);
-    });
-
-    it('should not allow unauthenticated user create event', async () => {
-      const event = await factory(Event).make();
-
-      const response = await request(app.getHttpServer())
-        .post('/events')
+        .post('/categories')
         .set('Accept', 'application/json')
-        .send(event)
+        .send(category)
         .expect(HttpStatus.UNAUTHORIZED);
 
       expect(response.body.message).toEqual('Unauthorized');
     });
 
-    it('should not allow non admin user create event', async () => {
-      const response = await publishEvent({}, { is_admin: false });
+    it('should not allow non admin user create category', async () => {
+      const response = await publishCategory({}, { is_admin: false });
 
       expect(response.status).toEqual(HttpStatus.FORBIDDEN);
       expect(response.body.message).toEqual('Forbidden resource');
     });
 
-    it('should allow admin user create event', async () => {
-      const event = await factory(Event).make();
-      const response = await publishEvent(event);
+    it('should allow admin user create category', async () => {
+      const category = await factory(Category).make();
+      const response = await publishCategory(category);
 
       expect(response.status).toEqual(HttpStatus.CREATED);
 
-      expect(response.body.title).toEqual(event.title);
+      expect(response.body.name).toEqual(category.name);
     });
 
-    it('should validate fields correctly when creating an event', async () => {
-      const response = await publishEvent({ title: '', description: '' });
+    it('should validate fields correctly when creating an category', async () => {
+      const response = await publishCategory({ name: '', description: '' });
 
       expect(response.status).toEqual(HttpStatus.BAD_REQUEST);
-      expect(response.body.message).toHaveLength(2);
+      expect(response.body.message).toHaveLength(1);
     });
 
-    it('should not allow unauthenticated user delete an event', async () => {
-      const event = await factory(Event).create();
+    it('should not allow unauthenticated user delete an category', async () => {
+      const category = await factory(Category).create();
 
       const response = await request(app.getHttpServer())
-        .delete(`/events/${event.id}`)
+        .delete(`/categories/${category.id}`)
         .set('Accept', 'application/json')
         .expect(HttpStatus.UNAUTHORIZED);
 
       expect(response.body.message).toEqual('Unauthorized');
     });
 
-    it('should not allow non admin user delete an event', async () => {
-      const event = await factory(Event).create();
+    it('should not allow non admin user delete an category', async () => {
+      const category = await factory(Category).create();
 
       await authenticateUser();
 
       const response = await request(app.getHttpServer())
-        .delete(`/events/${event.id}`)
+        .delete(`/categories/${category.id}`)
         .set('Accept', 'application/json')
         .set('Authorization', `Bearer ${token}`)
         .expect(HttpStatus.FORBIDDEN);
@@ -111,13 +100,13 @@ describe('EventsController (e2e)', () => {
       expect(response.body.message).toEqual('Forbidden resource');
     });
 
-    it('should allow admin user delete event', async () => {
-      const event = await factory(Event).create();
+    it('should allow admin user delete category', async () => {
+      const category = await factory(Category).create();
 
       await authenticateUser({ is_admin: true });
 
       const response = await request(app.getHttpServer())
-        .delete(`/events/${event.id}`)
+        .delete(`/categories/${category.id}`)
         .set('Accept', 'application/json')
         .set('Authorization', `Bearer ${token}`)
         .expect(HttpStatus.OK);
@@ -125,51 +114,51 @@ describe('EventsController (e2e)', () => {
       expect(response.body.affected).toEqual(1);
     });
 
-    it('should not allow unauthenticated user update an event', async () => {
-      const event = await factory(Event).create();
+    it('should not allow unauthenticated user update an category', async () => {
+      const category = await factory(Category).create();
 
       const response = await request(app.getHttpServer())
-        .put(`/events/${event.id}`)
+        .put(`/categories/${category.id}`)
         .set('Accept', 'application/json')
-        .send({ title: 'updated title' })
+        .send({ name: 'updated name' })
         .expect(HttpStatus.UNAUTHORIZED);
 
       expect(response.body.message).toEqual('Unauthorized');
     });
 
-    it('should not allow non admin user update an event', async () => {
-      const event = await factory(Event).create();
+    it('should not allow non admin user update an category', async () => {
+      const category = await factory(Category).create();
 
       await authenticateUser();
 
       const response = await request(app.getHttpServer())
-        .put(`/events/${event.id}`)
+        .put(`/categories/${category.id}`)
         .set('Accept', 'application/json')
         .set('Authorization', `Bearer ${token}`)
-        .send({ title: 'updated title' })
+        .send({ name: 'updated name' })
         .expect(HttpStatus.FORBIDDEN);
 
       expect(response.body.message).toEqual('Forbidden resource');
     });
 
-    it('should allow admin user update event', async () => {
-      const event = await factory(Event).create();
+    it('should allow admin user update category', async () => {
+      const category = await factory(Category).create();
 
       await authenticateUser({ is_admin: true });
 
       const response = await request(app.getHttpServer())
-        .put(`/events/${event.id}`)
+        .put(`/categories/${category.id}`)
         .set('Accept', 'application/json')
         .set('Authorization', `Bearer ${token}`)
-        .send({ title: 'updated title' })
+        .send({ name: 'updated name' })
         .expect(HttpStatus.OK);
 
-      expect(response.body.title).toEqual('updated title');
+      expect(response.body.name).toEqual('updated name');
     });
   });
 
-  async function publishEvent(
-    overrides: Partial<Event> = {},
+  async function publishCategory(
+    overrides: Partial<Category> = {},
     userOverrides: Partial<User> = {},
   ) {
     const user = await factory(User).create({
@@ -178,7 +167,7 @@ describe('EventsController (e2e)', () => {
       ...userOverrides,
     });
 
-    const event = await factory(Event).make(overrides);
+    const category = await factory(Category).make(overrides);
 
     const response = await request(app.getHttpServer())
       .post('/auth/login')
@@ -188,10 +177,10 @@ describe('EventsController (e2e)', () => {
     token = response.body.access_token;
 
     return request(app.getHttpServer())
-      .post('/events')
+      .post('/categories')
       .set('Accept', 'application/json')
       .set('Authorization', `Bearer ${token}`)
-      .send(event);
+      .send(category);
   }
 
   async function authenticateUser(overrides: Partial<User> = {}) {
