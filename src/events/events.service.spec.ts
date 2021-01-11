@@ -6,6 +6,7 @@ import {
 } from '@/common/common.constants';
 import { Test, TestingModule } from '@nestjs/testing';
 import { Repository } from 'typeorm';
+import { Event } from './entities/event.entity';
 import { EventsService } from './events.service';
 
 const mockEventRepository = () => ({
@@ -131,5 +132,14 @@ describe('EventsService', () => {
     expect(event).toEqual(
       expect.objectContaining({ ...createEventArgs, title: 'update' }),
     );
+  });
+
+  it('should call the slugify listener method on entity', () => {
+    const event = new Event();
+    event.title = 'Dev Summit II';
+
+    event.slugify();
+
+    expect(event.slug).toBe('dev-summit-ii');
   });
 });

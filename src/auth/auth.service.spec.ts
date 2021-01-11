@@ -3,6 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { AuthService } from './auth.service';
 import { UsersService } from '@/users/users.service';
+import { HttpException } from '@nestjs/common';
 
 const dummyUser = {
   id: 1,
@@ -68,6 +69,19 @@ describe('AuthService', () => {
 
       expect(userService.getByEmail).toHaveBeenCalledTimes(1);
       expect(user).toBeNull();
+    });
+
+    it('should catch error thrown', async () => {
+      (userService.getByEmail as jest.Mock).mockRejectedValue(new Error());
+
+      expect(
+        async () =>
+          await service.authenticateUser({
+            email: dummyUser.email,
+            password: 'password221',
+          }),
+      ).rejects.toThrowError(HttpException);
+      expect(userService.getByEmail).toHaveBeenCalledTimes(1);
     });
 
     it('should log a user in and return access_token', async () => {

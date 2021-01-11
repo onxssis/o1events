@@ -22,6 +22,6 @@ export class Category extends CoreEntity {
   @BeforeInsert()
   @BeforeUpdate()
   slugify() {
-    this.slug = slugify(this.name);
+    this.slug = slugify(this.name, { lower: true });
   }
 }

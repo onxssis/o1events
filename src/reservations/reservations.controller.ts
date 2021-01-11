@@ -5,7 +5,6 @@ import {
   HttpException,
   HttpStatus,
   Post,
-  Res,
   UseGuards,
 } from '@nestjs/common';
 
@@ -14,7 +13,6 @@ import { Auth } from '@/common/decorators/auth-user.decorator';
 import { User } from '@/users/entities/user.entity';
 import { CreateReservationDto } from './dto/create-reservation.dto';
 import { ReservationsService } from './reservations.service';
-import { Response } from 'express';
 
 @Controller('reservations')
 @UseGuards(AuthGuard)

@@ -2,6 +2,7 @@ import { CATEGORY_REPOSITORY } from '@/common/common.constants';
 import { Test, TestingModule } from '@nestjs/testing';
 import { Repository } from 'typeorm';
 import { CategoriesService } from './categories.service';
+import { Category } from './entities/category.entity';
 
 const mockCategoryRepository = () => ({
   findOne: jest.fn(),
@@ -97,5 +98,14 @@ describe('CategoriesService', () => {
     expect(category).toEqual(
       expect.objectContaining({ ...createCategoryArgs, name: 'update' }),
     );
+  });
+
+  it('should call the slugify listener method on entity', () => {
+    const category = new Category();
+    category.name = 'Dev Summit';
+
+    category.slugify();
+
+    expect(category.slug).toBe('dev-summit');
   });
 });

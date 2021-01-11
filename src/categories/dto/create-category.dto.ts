@@ -7,5 +7,5 @@ export class CreateCategoryDto {
 
   @IsString()
   @IsOptional()
-  readonly description: string;
+  readonly description?: string;
 }
