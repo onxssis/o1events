@@ -3,6 +3,7 @@ import {
   PaginatedResultDto,
   PaginationQueryDto,
 } from '@/common/dto/pagination.dto';
+import { DeleteResult } from 'typeorm';
 import { CreateEventDto } from '../dto/create-event.dto';
 import { UpdateEventDto } from '../dto/update-event.dto';
 import { Event } from '../entities/event.entity';
@@ -21,5 +22,5 @@ export interface IEventRepository {
 
   update(id: number, updateEventDto: UpdateEventDto): Promise<Event>;
 
-  delete(id: number): Promise<any>;
+  delete(id: number): Promise<DeleteResult | any>;
 }

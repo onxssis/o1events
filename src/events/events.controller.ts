@@ -56,7 +56,7 @@ export class EventsController {
     @Query() filterDto: FilterQueryDto,
     @Query() paginationDto: PaginationQueryDto,
   ) {
-    console.log({ ...filterDto, ...paginationDto });
+    return { ...filterDto, ...paginationDto };
   }
 
   @Get(':slug')

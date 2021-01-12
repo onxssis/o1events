@@ -2,10 +2,10 @@ import { IsOptional } from 'class-validator';
 
 export class PaginationQueryDto {
   @IsOptional()
-  page: number;
+  page?: number;
 
   @IsOptional()
-  limit: number;
+  limit?: number;
 }
 
 export class PaginatedResultDto<T = any> {

@@ -98,7 +98,7 @@ describe('AuthController', () => {
     it('should get an authenticated user profile', async () => {
       const result = new User();
 
-      expect(await controller.getProfile(result)).toMatchObject(result);
+      expect(controller.getProfile(result)).toMatchObject(result);
     });
   });
 });
