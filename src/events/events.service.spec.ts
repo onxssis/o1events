@@ -1,11 +1,11 @@
-import { CategoriesModule } from '@/categories/categories.module';
+import { Test, TestingModule } from '@nestjs/testing';
+import { Repository } from 'typeorm';
+
 import { CategoriesService } from '@/categories/categories.service';
 import {
   CATEGORY_REPOSITORY,
   EVENT_REPOSITORY,
 } from '@/common/common.constants';
-import { Test, TestingModule } from '@nestjs/testing';
-import { Repository } from 'typeorm';
 import { Event } from './entities/event.entity';
 import { EventsService } from './events.service';
 

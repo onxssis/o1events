@@ -2,6 +2,7 @@ import { USER_REPOSITORY } from '@/common/common.constants';
 import { ConflictException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { Repository } from 'typeorm';
+import { User } from './entities/user.entity';
 import { UserRepository } from './repositories/typeorm/user.repository';
 import { IUserRepository } from './repositories/user.repository';
 import { UsersService } from './users.service';
@@ -91,6 +92,23 @@ describe('UsersService', () => {
 
       expect(usersRepository.findOne).toHaveBeenCalledTimes(1);
       expect(result).toMatchObject(user);
+    });
+
+    it('should call the hashPassword method on the Entity', () => {
+      const user = new User();
+      const password = 'password';
+      user.password = password;
+
+      user.hashPassword();
+
+      expect(user.password.length).toBeGreaterThan(password.length);
+    });
+
+    it('should call the else path of the hashPassword method on the Entity', () => {
+      const user = new User();
+      user.hashPassword();
+
+      expect(user.password).toBeUndefined();
     });
   });
 });

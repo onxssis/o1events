@@ -21,7 +21,7 @@ export class EventRepository implements IEventRepository {
   async findAll(
     paginationDto: PaginationQueryDto,
   ): Promise<PaginatedResultDto> {
-    const { limit, page = 1 } = paginationDto;
+    const { limit, page } = paginationDto;
     const skip = (page - 1) * limit;
 
     const [data, totalCount] = await this.repo

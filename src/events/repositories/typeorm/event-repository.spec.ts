@@ -1,11 +1,30 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { Connection } from 'typeorm';
 import { Category } from '@/categories/entities/category.entity';
-import {
-  eventDto,
-  mockDbConnectionWithQueryBuilder,
-} from '../../../../test/helpers';
+import { eventDto } from '../../../../test/helpers';
 import { EventRepository } from './event.repository';
+
+const mockDbConnectionWithQueryBuilder = () => ({
+  getRepository: () => ({
+    createQueryBuilder: () => ({
+      leftJoinAndSelect: () => ({
+        loadRelationCountAndMap: () => ({
+          skip: () => ({
+            take: () => ({
+              getManyAndCount: jest.fn().mockResolvedValue([[], 0]),
+            }),
+          }),
+        }),
+      }),
+    }),
+    delete: jest.fn().mockResolvedValue(null),
+    create: jest.fn().mockResolvedValue(true),
+    save: jest.fn().mockResolvedValue(true),
+    findOneOrFail: jest.fn().mockResolvedValue({}),
+    find: jest.fn().mockResolvedValue([{ title: 'test event' }]),
+    preload: jest.fn().mockResolvedValue({ categories: [{ id: 1 }] }),
+  }),
+});
 
 describe('EventRepository', () => {
   let eventRepository: EventRepository;
@@ -49,14 +68,23 @@ describe('EventRepository', () => {
     expect(events).toMatchObject(result);
   });
 
+  it('should call the update method', async () => {
+    const event = await eventRepository.update(1, {
+      ...eventDto,
+      categories: [],
+    });
+
+    expect(event).toBe(true);
+  });
+
   it('should call the getUpcomingEvents method', async () => {
-    const event = await eventRepository.getUpcomingEvents(5);
+    const event = await eventRepository.getUpcomingEvents();
 
     expect(event).toHaveLength(1);
   });
 
   it('should call the getPastEvents method', async () => {
-    const event = await eventRepository.getPastEvents(2);
+    const event = await eventRepository.getPastEvents();
 
     expect(event).toHaveLength(1);
   });

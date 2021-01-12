@@ -90,7 +90,8 @@
     },
     "collectCoverageFrom": [
       "**/*.(t|j)s",
-      "!**/factories/*.(t|j)s"
+      "!**/factories/*.(t|j)s",
+      "!**/factory/*.(t|j)s"
     ],
     "coveragePathIgnorePatterns": [
       ".*\\.module\\.ts$",

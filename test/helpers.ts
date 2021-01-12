@@ -8,24 +8,3 @@ export const eventDto = {
   startDate: new Date().toISOString(),
   endDate: new Date().toISOString(),
 };
-
-export const mockDbConnectionWithQueryBuilder = () => ({
-  getRepository: () => ({
-    createQueryBuilder: () => ({
-      leftJoinAndSelect: () => ({
-        loadRelationCountAndMap: () => ({
-          skip: () => ({
-            take: () => ({
-              getManyAndCount: jest.fn().mockResolvedValue([[], 0]),
-            }),
-          }),
-        }),
-      }),
-    }),
-    delete: jest.fn().mockResolvedValue(null),
-    create: jest.fn().mockResolvedValue(true),
-    save: jest.fn().mockResolvedValue(true),
-    findOneOrFail: jest.fn().mockResolvedValue({}),
-    find: jest.fn().mockResolvedValue([{ title: 'test event' }]),
-  }),
-});

@@ -25,19 +25,11 @@ export class User extends CoreEntity {
   })
   public reservations: Reservation[];
 
-  // private tempPassword: string;
-
-  // @AfterLoad()
-  // private loadTempPassword(): void {
-  //   this.tempPassword = this.password;
-  // }
-
   @BeforeInsert()
   @BeforeUpdate()
-  private hashPassword(): void {
+  hashPassword(): void {
     if (this.password) {
       this.password = bcrypt.hashSync(this.password, 10);
-      // this.loadTempPassword();
     }
   }
 }
