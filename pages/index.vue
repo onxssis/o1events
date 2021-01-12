@@ -1,11 +1,14 @@
 <template>
   <div class="container">
-    <h1 class="text-blue-400">Event App</h1>
+    <!-- <h1 class="text-blue-400">Event App</h1> -->
   </div>
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
+import { Component, Vue } from 'nuxt-property-decorator'
 
-export default Vue.extend({})
+@Component({
+  layout: 'default',
+})
+export default class IndexPage extends Vue {}
 </script>
