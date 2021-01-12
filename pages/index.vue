@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <h1>Event App</h1>
+    <h1 class="text-blue-400">Event App</h1>
   </div>
 </template>
 

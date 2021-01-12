@@ -21,10 +21,9 @@ export default {
 
   // Modules for dev and build (recommended) (https://go.nuxtjs.dev/config-modules)
   buildModules: [
-    // https://go.nuxtjs.dev/typescript
     '@nuxt/typescript-build',
-    // https://go.nuxtjs.dev/stylelint
     '@nuxtjs/stylelint-module',
+    '@nuxtjs/tailwindcss',
   ],
 
   // Modules (https://go.nuxtjs.dev/config-modules)
