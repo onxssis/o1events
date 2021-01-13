@@ -1,6 +1,8 @@
 <template>
   <div>
-    <Hero />
+    <hero />
+    <base-search />
+    <upcoming-events />
   </div>
 </template>
 

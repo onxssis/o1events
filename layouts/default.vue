@@ -1,5 +1,5 @@
 <template>
-  <div class="relative">
+  <div class="relative px-4 md:px-0">
     <BasePattern />
     <Header />
     <Nuxt />
