@@ -14,10 +14,13 @@ import { User } from './users/entities/user.entity';
 import { Reservation } from './reservations/entities/reservation.entity';
 import { ReservationsModule } from './reservations/reservations.module';
 
+const ENVIRONMENT = process.env.NODE_ENV;
+
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+      envFilePath: ENVIRONMENT ? `.env.${ENVIRONMENT}` : '.env',
       validationSchema: Joi.object({
         DB_CONNECTION: Joi.required(),
         DB_HOST: Joi.required(),
@@ -26,6 +29,7 @@ import { ReservationsModule } from './reservations/reservations.module';
         DB_PASSWORD: Joi.required(),
         DB_PORT: Joi.required(),
         JWT_PRIVATE_KEY: Joi.required(),
+        JWT_ACCESS_TOKEN_EXPIRATION: Joi.required(),
       }),
       cache: process.env.NODE_ENV === 'production',
     }),

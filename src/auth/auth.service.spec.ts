@@ -1,9 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
+import { HttpException } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { AuthService } from './auth.service';
 import { UsersService } from '@/users/users.service';
-import { HttpException } from '@nestjs/common';
 
 const dummyUser = {
   id: 1,
@@ -21,10 +22,15 @@ const mockJwtService = () => ({
   verify: jest.fn(),
 });
 
+const mockConfigService = () => ({
+  get: jest.fn(() => '7h'),
+});
+
 describe('AuthService', () => {
   let service: AuthService;
   let userService: UsersService;
   let jwtService: JwtService;
+  let configService: ConfigService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -38,12 +44,17 @@ describe('AuthService', () => {
           provide: JwtService,
           useValue: mockJwtService(),
         },
+        {
+          provide: ConfigService,
+          useValue: mockConfigService(),
+        },
       ],
     }).compile();
 
     service = module.get<AuthService>(AuthService);
     userService = module.get<UsersService>(UsersService);
     jwtService = module.get<JwtService>(JwtService);
+    configService = module.get<ConfigService>(ConfigService);
   });
 
   it('should be defined', () => {
@@ -87,11 +98,15 @@ describe('AuthService', () => {
     it('should log a user in and return access_token', async () => {
       const result = await service.login(dummyUser);
 
+      expect(configService.get).toHaveBeenCalledTimes(1);
       expect(jwtService.sign).toHaveBeenCalledTimes(1);
-      expect(jwtService.sign).toHaveBeenCalledWith({
-        email: dummyUser.email,
-        sub: dummyUser.id,
-      });
+      expect(jwtService.sign).toHaveBeenCalledWith(
+        {
+          email: dummyUser.email,
+          sub: dummyUser.id,
+        },
+        { expiresIn: '7h' },
+      );
       expect(result).toMatchObject({
         user: dummyUser,
         access_token: 'signed-token',

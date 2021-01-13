@@ -20,6 +20,9 @@ services:
       DB_DATABASE: eventbostest
       DB_USERNAME: postgres
       DB_PASSWORD: postgres
+      DB_CONNECTION: postgres
+      JWT_PRIVATE_KEY: key4%#83
+      JWT_ACCESS_TOKEN_EXPIRATION: 1h
     networks:
       - testnet
     depends_on:

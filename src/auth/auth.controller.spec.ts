@@ -1,19 +1,13 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { CategoriesService } from '@/categories/categories.service';
-import {
-  CATEGORY_REPOSITORY,
-  EVENT_REPOSITORY,
-  RESERVATION_REPOSITORY,
-  USER_REPOSITORY,
-} from '@/common/common.constants';
+import { USER_REPOSITORY } from '@/common/common.constants';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { User } from '@/users/entities/user.entity';
-import { JwtStrategy } from './strategies/jwt.strategy';
 import { UsersService } from '@/users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { CreateUserDto } from '@/users/dto/create-user.dto';
 import { HttpException } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 
 describe('AuthController', () => {
   let controller: AuthController;
@@ -31,6 +25,10 @@ describe('AuthController', () => {
         },
         {
           provide: JwtService,
+          useValue: {},
+        },
+        {
+          provide: ConfigService,
           useValue: {},
         },
         UsersService,
