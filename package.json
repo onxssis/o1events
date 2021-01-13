@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "nuxt-ts",
+    "dev": "nuxt-ts --port 3333",
     "build": "nuxt-ts build",
     "start": "nuxt-ts start",
     "generate": "nuxt-ts generate",
@@ -13,9 +13,12 @@
   },
   "dependencies": {
     "@nuxt/typescript-runtime": "^2.0.0",
+    "@nuxtjs/axios": "^5.12.5",
     "core-js": "^3.6.5",
+    "js-cookie": "^2.2.1",
     "nuxt": "^2.14.6",
-    "nuxt-property-decorator": "^2.8.8"
+    "nuxt-property-decorator": "^2.8.8",
+    "vuex-persistedstate": "^4.0.0-beta.3"
   },
   "devDependencies": {
     "@nuxt/types": "^2.14.6",
@@ -26,6 +29,8 @@
     "@nuxtjs/stylelint-module": "^4.0.0",
     "@nuxtjs/tailwindcss": "^3.4.2",
     "@tailwindcss/postcss7-compat": "^2.0.2",
+    "@types/cookie": "^0.4.0",
+    "@types/js-cookie": "^2.2.6",
     "autoprefixer": "^9",
     "babel-eslint": "^10.1.0",
     "eslint": "^7.10.0",
