@@ -3,11 +3,16 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between h-16">
         <div class="flex">
-          <div class="flex-shrink-0 flex items-center">EventsGalore</div>
+          <div class="flex-shrink-0 flex items-center">
+            <h1 class="font-display">EventsGalore</h1>
+          </div>
         </div>
         <div class="hidden sm:ml-6 sm:flex sm:items-center">
           <div class="guest">
-            <a href="/login" class="inline-flex py-2 px-3 hover:text-royal">
+            <a
+              href="/login"
+              class="inline-flex py-2 px-3 text-gray-900 hover:text-royal"
+            >
               Log in
               <!-- <button
                 class="bg-transparent hover:text-royal-dark font-medium items-center leading-5 hover:bg-purple-50 text-sm px-5 py-2 rounded-md outline-none focus:outline-none"
@@ -19,7 +24,7 @@
             </a>
             <a class="inline-flex py-2 px-3">
               <button
-                class="bg-purple-50 text-royal-dark font-medium items-center leading-5 active:bg-pink-600 text-base px-5 py-2 rounded-md outline-none focus:outline-none"
+                class="bg-transparent hover:text-royal text-gray-900 font-medium items-center leading-5 text-base px-5 py-2 rounded-md outline-none focus:outline-none"
                 type="button"
                 style="transition: all 0.15s ease"
               >

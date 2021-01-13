@@ -18,6 +18,13 @@ module.exports = {
           lightest: '#ead1f7',
         },
       },
+      fontFamily: {
+        display: ['Graphik'],
+      },
+      maxWidth: {
+        container: '1200px',
+        mini: '1024px',
+      },
     },
   },
   variants: {
