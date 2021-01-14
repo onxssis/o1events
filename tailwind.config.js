@@ -27,6 +27,7 @@ module.exports = {
       },
       fontFamily: {
         display: ['Graphik'],
+        body: ['Inter'],
       },
       maxWidth: {
         container: '1200px',

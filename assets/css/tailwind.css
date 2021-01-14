@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 @import './graphik.css';
+@import './inter.css';
 
 @layer base {
   body {
