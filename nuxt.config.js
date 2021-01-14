@@ -20,7 +20,11 @@ export default {
   components: true,
 
   // Modules for dev and build (recommended) (https://go.nuxtjs.dev/config-modules)
-  buildModules: ['@nuxt/typescript-build', '@nuxtjs/tailwindcss'],
+  buildModules: [
+    '@nuxt/typescript-build',
+    '@nuxtjs/tailwindcss',
+    '@nuxtjs/svg',
+  ],
 
   // Modules (https://go.nuxtjs.dev/config-modules)
   modules: ['@nuxtjs/axios', '@nuxtjs/auth-next'],

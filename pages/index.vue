@@ -10,7 +10,7 @@
 import { Component, Vue } from 'nuxt-property-decorator'
 
 @Component({
-  layout: 'default',
+  layout: 'home',
 })
 export default class IndexPage extends Vue {}
 </script>

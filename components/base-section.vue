@@ -1,12 +1,12 @@
 <template>
-  <div class="max-w-screen-xl mx-auto my-4 px-4">
+  <div class="max-w-screen-xl mx-auto my-4 px-4" v-bind="$attrs">
     <div class="flex justify-center md:justify-between items-center mb-6">
       <h2 class="font-semibold text-2xl xl:text-4xl">{{ heading }}</h2>
-      <a
+      <NuxtLink
         v-if="seeAll"
-        href=""
+        :to="seeAllLink"
         class="text-carrot-dark hover:underline hidden md:inline-flex"
-        >See all</a
+        >See all</NuxtLink
       >
     </div>
 
@@ -19,8 +19,10 @@
     </div>
 
     <div v-if="seeAll" class="text-center mt-8">
-      <a href="" class="md:hidden text-carrot-dark hover:underline"
-        >See all events</a
+      <NuxtLink
+        :to="seeAllLink"
+        class="md:hidden text-carrot-dark hover:underline"
+        >See all events</NuxtLink
       >
     </div>
   </div>
@@ -29,16 +31,11 @@
 <script lang="ts">
 import { Vue, Component, Prop } from 'nuxt-property-decorator'
 
-@Component({
-  props: {
-    key: {
-      type: String,
-    },
-  },
-})
+@Component
 export default class BaseSection extends Vue {
   @Prop({ default: 'Section Heading' }) readonly heading!: string
   @Prop({ default: true }) readonly seeAll!: boolean
+  @Prop({ default: '/' }) readonly seeAllLink!: string
   @Prop({ default: false }) readonly loading!: boolean
   @Prop({ default: () => [] }) readonly data!: Array<any>
 }

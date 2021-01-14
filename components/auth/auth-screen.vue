@@ -12,6 +12,7 @@
           v-model="form.name"
           label="Name"
           placeholder="Full Name"
+          required="true"
         >
           <template v-slot:icon>
             <svg
@@ -36,6 +37,7 @@
           label="Email"
           placeholder="Email Address"
           type="email"
+          required="true"
         >
           <template v-slot:icon>
             <svg
@@ -60,6 +62,7 @@
           placeholder="Password"
           type="password"
           name="password"
+          required="true"
         >
           <template v-slot:icon>
             <svg

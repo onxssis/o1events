@@ -10,7 +10,7 @@
           </div>
         </div>
         <div class="hidden sm:ml-6 sm:flex sm:items-center">
-          <div v-if="!isLoggedIn">
+          <div v-if="$auth.loggedIn === false">
             <NuxtLink
               to="/login"
               class="inline-flex py-2 px-3 text-gray-900 hover:text-carrot"
@@ -20,11 +20,12 @@
             <NuxtLink class="inline-flex py-2 px-3" to="/register">
               Sign up
             </NuxtLink>
-
-            <NuxtLink class="inline-flex py-2 px-3" to="/auth"> Auth </NuxtLink>
           </div>
 
-          <div v-if="isLoggedIn" class="auth flex items-center">
+          <div
+            v-if="$auth.loggedIn && $auth.user"
+            class="auth flex items-center"
+          >
             <button
               class="p-1 border-2 border-transparent text-gray-400 rounded-full hover:text-gray-500 focus:outline-none focus:text-gray-500 focus:bg-gray-100 transition duration-150 ease-in-out"
             >
@@ -48,11 +49,12 @@
                   class="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-gray-300 transition duration-150 ease-in-out"
                   @click="open = !open"
                 >
-                  <img
+                  <!-- <img
                     class="h-8 w-8 rounded-full"
                     src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
                     alt=""
-                  />
+                  /> -->
+                  <default-avatar :initials="$auth.user.initials" />
                 </button>
               </div>
               <transition
@@ -137,10 +139,6 @@ import { Component, Vue } from 'nuxt-property-decorator'
 })
 export default class Header extends Vue {
   open = false
-
-  get isLoggedIn() {
-    return this.$auth.loggedIn
-  }
 
   async logout() {
     await this.$auth.logout()
