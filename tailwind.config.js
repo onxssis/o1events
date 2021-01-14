@@ -17,6 +17,13 @@ module.exports = {
           light: '#cc8ceb',
           lightest: '#ead1f7',
         },
+        carrot: {
+          darkest: '#fef4e9',
+          dark: '#e69045',
+          DEFAULT: '#ffa04d',
+          light: '#ffe7d3',
+          lightest: '#fef4e9',
+        },
       },
       fontFamily: {
         display: ['Graphik'],
@@ -24,6 +31,13 @@ module.exports = {
       maxWidth: {
         container: '1200px',
         mini: '1024px',
+      },
+      spacing: {
+        84: '21rem',
+        86: '22rem',
+      },
+      borderWidth: {
+        3: '3px',
       },
     },
   },

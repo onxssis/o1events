@@ -3,20 +3,11 @@
     class="flex flex-col relative p-3 w-64 h-64 border rounded-lg break-words"
   >
     <div class="head flex items-center justify-between">
-      <div class="border border-gray-800 flex text-xs p-1 py-px rounded">
-        <svg
-          data-swarm-icon="true"
-          width="18"
-          height="18"
-          xmlns="http://www.w3.org/2000/svg"
-          class="mr-1"
-        >
-          <path
-            d="M11.5 4.5A1.5 1.5 0 0113 6v1.4L16 5v8l-3-2.4V12a1.5 1.5 0 01-1.5 1.5h-8A1.5 1.5 0 012 12V6a1.5 1.5 0 011.5-1.5h8z"
-          ></path>
-        </svg>
-
-        <span class="pr-1">online event</span>
+      <div
+        class="border border-gray-500 flex items-center bg-white text-xs p-1 py-px rounded-md"
+      >
+        <dot />
+        <span class="pr-1 pl-1">online event</span>
       </div>
 
       <button>
@@ -43,8 +34,8 @@
 
       <p class="text-sm"></p>
     </div>
-    <div class="bottom mt-auto">
-      <div class="flex items-center mt-6 w-full">
+    <div class="bottom mt-auto flex justify-between">
+      <!-- <div class="flex items-center mt-6 w-full">
         <div class="shadow border-2 border-white rounded-full w-8 h-8">
           <img
             class="w-full h-full overflow-hidden object-cover rounded-full"
@@ -67,6 +58,15 @@
           />
         </div>
         <p class="text-gray-600 text-sm font-normal ml-2">+2 more</p>
+      </div> -->
+      <div class="fav ml-auto">
+        <button>
+          <svg width="24" height="24">
+            <path
+              d="M15.668 8.626l8.332 1.159-6.065 5.874 1.48 8.341-7.416-3.997-7.416 3.997 1.481-8.341-6.064-5.874 8.331-1.159 3.668-7.626 3.669 7.626zm-6.67.925l-6.818.948 4.963 4.807-1.212 6.825 6.068-3.271 6.069 3.271-1.212-6.826 4.964-4.806-6.819-.948-3.002-6.241-3.001 6.241z"
+            />
+          </svg>
+        </button>
       </div>
     </div>
   </div>

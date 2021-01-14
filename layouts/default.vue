@@ -1,10 +1,17 @@
 <template>
-  <div class="relative px-4 md:px-0">
+  <div class="relative">
     <BasePattern />
     <Header />
     <Nuxt />
   </div>
 </template>
+
+<script lang="ts">
+import Vue from 'vue'
+export default Vue.extend({
+  name: 'default',
+})
+</script>
 
 <style>
 html {

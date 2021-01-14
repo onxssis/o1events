@@ -1,38 +1,30 @@
 <template>
-  <nav ref="nav" class="bg-white">
+  <nav class="bg-white px-4 md:px-0">
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
       <div class="flex justify-between h-16">
         <div class="flex">
           <div class="flex-shrink-0 flex items-center">
-            <h1 class="font-display">EventsGalore</h1>
+            <h1 class="font-display">
+              <NuxtLink to="/">EventsGalore</NuxtLink>
+            </h1>
           </div>
         </div>
         <div class="hidden sm:ml-6 sm:flex sm:items-center">
-          <div class="guest">
-            <a
-              href="/login"
-              class="inline-flex py-2 px-3 text-gray-900 hover:text-royal"
+          <div v-if="!isLoggedIn">
+            <NuxtLink
+              to="/login"
+              class="inline-flex py-2 px-3 text-gray-900 hover:text-carrot"
             >
               Log in
-              <!-- <button
-                class="bg-transparent hover:text-royal-dark font-medium items-center leading-5 hover:bg-purple-50 text-sm px-5 py-2 rounded-md outline-none focus:outline-none"
-                type="button"
-                style="transition: all 0.15s ease"
-              >
-                Log In
-              </button> -->
-            </a>
-            <a class="inline-flex py-2 px-3">
-              <button
-                class="bg-transparent hover:text-royal text-gray-900 font-medium items-center leading-5 text-base px-5 py-2 rounded-md outline-none focus:outline-none"
-                type="button"
-                style="transition: all 0.15s ease"
-              >
-                Sign up
-              </button>
-            </a>
+            </NuxtLink>
+            <NuxtLink class="inline-flex py-2 px-3" to="/register">
+              Sign up
+            </NuxtLink>
+
+            <NuxtLink class="inline-flex py-2 px-3" to="/auth"> Auth </NuxtLink>
           </div>
-          <div v-if="false" class="auth flex items-center">
+
+          <div v-if="isLoggedIn" class="auth flex items-center">
             <button
               class="p-1 border-2 border-transparent text-gray-400 rounded-full hover:text-gray-500 focus:outline-none focus:text-gray-500 focus:bg-gray-100 transition duration-150 ease-in-out"
             >
@@ -50,7 +42,7 @@
                 />
               </svg>
             </button>
-            <div class="ml-3 relative">
+            <div ref="clickAway" class="ml-3 relative">
               <div>
                 <button
                   class="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-gray-300 transition duration-150 ease-in-out"
@@ -86,11 +78,13 @@
                       class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out"
                       >Settings</a
                     >
-                    <a
-                      href="#"
-                      class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out"
-                      >Sign out</a
+                    <button
+                      type="button"
+                      class="bg-transparent block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out text-left w-full"
+                      @click="logout"
                     >
+                      Sign out
+                    </button>
                   </div>
                 </div>
               </transition>
@@ -144,10 +138,19 @@ import { Component, Vue } from 'nuxt-property-decorator'
 export default class Header extends Vue {
   open = false
 
+  get isLoggedIn() {
+    return this.$auth.loggedIn
+  }
+
+  async logout() {
+    await this.$auth.logout()
+  }
+
   mounted() {
     document.addEventListener('click', (event) => {
       event.stopPropagation()
-      if (!(this.$refs.nav as Element).contains(event.target as Node)) {
+      const ref = this.$refs.clickAway
+      if (ref && !(ref as Element).contains(event.target as Node)) {
         this.open = false
       }
     })

@@ -1,7 +1,7 @@
 <template>
   <div class="max-w-container mx-auto my-4">
-    <div class="flex justify-between items-center">
-      <h2 class="font-semibold text-2xl">Upcoming Events</h2>
+    <div class="flex justify-between items-center mb-6">
+      <h2 class="font-semibold text-2xl xl:text-4xl">Upcoming Events</h2>
       <a href="" class="text-royal hover:underline hidden md:inline-flex"
         >See all</a
       >

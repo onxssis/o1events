@@ -14,7 +14,7 @@ export default {
   css: [],
 
   // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
-  plugins: ['~/plugins/local-auth-storage'],
+  plugins: [],
 
   // Auto import components (https://go.nuxtjs.dev/config-components)
   components: true,
@@ -27,10 +27,10 @@ export default {
   ],
 
   // Modules (https://go.nuxtjs.dev/config-modules)
-  modules: ['@nuxtjs/axios'],
+  modules: ['@nuxtjs/axios', '@nuxtjs/auth-next'],
 
   axios: {
-    baseURL: 'http://localhost:3000/api', // Used as fallback if no runtime config is provided
+    baseURL: 'http://localhost:3000', // Used as fallback if no runtime config is provided
   },
 
   publicRuntimeConfig: {
@@ -42,6 +42,41 @@ export default {
   privateRuntimeConfig: {
     axios: {
       baseURL: process.env.BASE_URL,
+    },
+  },
+
+  loading: { color: '#ffa04d', throttle: 0 },
+
+  auth: {
+    redirect: {
+      home: '/',
+      logout: '/',
+      login: '/login',
+      callback: '/callback',
+    },
+    rewriteRedirects: true,
+    vuex: {
+      namespace: 'auth',
+    },
+    strategies: {
+      local: {
+        token: {
+          property: 'access_token',
+        },
+        user: {
+          property: false,
+        },
+        endpoints: {
+          logout: false,
+          login: {
+            url: '/auth/login',
+            method: 'post',
+          },
+          user: { url: '/auth/profile', method: 'get', propertyName: false },
+        },
+        tokenRequired: true,
+        tokenType: 'Bearer',
+      },
     },
   },
 
