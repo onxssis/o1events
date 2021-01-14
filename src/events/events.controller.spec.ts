@@ -163,4 +163,15 @@ describe('EventsController', () => {
       expect(await controller.remove('1')).toBe(result);
     });
   });
+
+  describe('upcoming', () => {
+    it('should get upcoming events', async () => {
+      const result = [];
+      jest
+        .spyOn<any, any>(eventsService, 'getUpcomingEvents')
+        .mockResolvedValue(result);
+
+      expect(await controller.upcoming()).toMatchObject(result);
+    });
+  });
 });

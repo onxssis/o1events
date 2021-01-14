@@ -16,6 +16,7 @@ const mockEventRepository = () => ({
   delete: jest.fn(),
   findAll: jest.fn(),
   findOneBySlug: jest.fn(),
+  getUpcomingEvents: jest.fn(),
 });
 
 const mockCategoryRepository = () => ({
@@ -116,6 +117,15 @@ describe('EventsService', () => {
 
     expect(eventRepository.delete).toHaveBeenCalledTimes(1);
     expect(event).toBeNull();
+  });
+
+  it('should call the getUpcomingEvents method of the event repository', async () => {
+    (eventRepository as any).getUpcomingEvents.mockReturnValue([]);
+
+    const events = await service.getUpcomingEvents();
+
+    expect((eventRepository as any).getUpcomingEvents).toHaveBeenCalledTimes(1);
+    expect(events).toMatchObject([]);
   });
 
   it('should call the update method of the event repository', async () => {

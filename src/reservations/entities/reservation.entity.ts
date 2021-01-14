@@ -23,6 +23,6 @@ export class Reservation {
   @ManyToOne(() => Event, (event) => event.reservations)
   public event: Event;
 
-  @ManyToOne(() => User, (user) => user.reservations)
+  @ManyToOne(() => User, (user) => user.reservations, { eager: true })
   public user: User;
 }

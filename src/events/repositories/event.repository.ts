@@ -23,4 +23,6 @@ export interface IEventRepository {
   update(id: number, updateEventDto: UpdateEventDto): Promise<Event>;
 
   delete(id: number): Promise<DeleteResult | any>;
+
+  getUpcomingEvents(): Promise<Event[]>;
 }

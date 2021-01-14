@@ -51,6 +51,11 @@ export class EventsController {
     return await this.eventsService.findAll(paginationDto);
   }
 
+  @Get('upcoming')
+  async upcoming() {
+    return await this.eventsService.getUpcomingEvents();
+  }
+
   @Get('search')
   async search(
     @Query() filterDto: FilterQueryDto,

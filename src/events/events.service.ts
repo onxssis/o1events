@@ -50,4 +50,8 @@ export class EventsService {
   remove(id: number) {
     return this.eventRepository.delete(id);
   }
+
+  getUpcomingEvents() {
+    return this.eventRepository.getUpcomingEvents();
+  }
 }
