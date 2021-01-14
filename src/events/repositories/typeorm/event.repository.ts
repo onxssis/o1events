@@ -2,7 +2,6 @@ import { Connection, EntityRepository, LessThan, MoreThan } from 'typeorm';
 import { Event } from '@/events/entities/event.entity';
 import { IEventRepository } from '../event.repository';
 import { CreateEventDto } from '@/events/dto/create-event.dto';
-import { CategoriesService } from '@/categories/categories.service';
 import { UpdateEventDto } from '@/events/dto/update-event.dto';
 import {
   PaginatedResultDto,
@@ -24,13 +23,19 @@ export class EventRepository implements IEventRepository {
     const { limit, page } = paginationDto;
     const skip = (page - 1) * limit;
 
-    const [data, totalCount] = await this.repo
-      .createQueryBuilder('event')
-      .leftJoinAndSelect('event.categories', 'category')
-      .loadRelationCountAndMap('event.reservationsCount', 'event.reservations')
-      .skip(skip)
-      .take(limit)
-      .getManyAndCount();
+    // const [data, totalCount] = await this.repo
+    //   .createQueryBuilder('event')
+    //   .addSelect(`CASE WHEN event.type='person' THEN 1 END`, 'isOnline')
+    //   .leftJoinAndSelect('event.categories', 'category')
+    //   .loadRelationCountAndMap('event.reservationsCount', 'event.reservations')
+    //   .skip(skip)
+    //   .take(limit)
+    //   .getManyAndCount();
+
+    const [data, totalCount] = await this.repo.findAndCount({
+      skip,
+      take: limit,
+    });
 
     return {
       totalCount,

@@ -12,7 +12,11 @@ import slugify from 'slugify';
 import { Category } from '@/categories/entities/category.entity';
 import { CoreEntity } from '@/common/entities/core.entity';
 import { Reservation } from '@/reservations/entities/reservation.entity';
-import { Expose } from 'class-transformer';
+
+export enum EventType {
+  ONLINE = 'online',
+  PERSON = 'person',
+}
 
 @Entity()
 export class Event extends CoreEntity {
@@ -48,6 +52,9 @@ export class Event extends CoreEntity {
 
   @Column({ default: 0 })
   price: number;
+
+  @Column({ type: 'enum', enum: EventType, default: EventType.PERSON })
+  type: EventType;
 
   @ManyToMany(() => Category, { eager: true, onDelete: 'CASCADE' })
   @JoinTable()

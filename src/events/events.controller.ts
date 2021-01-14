@@ -9,6 +9,7 @@ import {
   ConflictException,
   NotFoundException,
   Query,
+  UseInterceptors,
 } from '@nestjs/common';
 import { EventsService } from './events.service';
 import { CreateEventDto } from './dto/create-event.dto';
@@ -19,8 +20,10 @@ import {
 } from '@/common/dto/pagination.dto';
 import { FilterQueryDto } from '@/common/dto/filter.dto';
 import { AdminRoute } from '@/common/decorators/admin-route.decorator';
+import { EntityCollectionSerializer } from '@/common/interceptors/serializer.interceptor';
 
 @Controller('events')
+@UseInterceptors(EntityCollectionSerializer)
 export class EventsController {
   constructor(private readonly eventsService: EventsService) {}
 

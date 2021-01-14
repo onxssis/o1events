@@ -23,6 +23,7 @@ const mockDbConnectionWithQueryBuilder = () => ({
     findOneOrFail: jest.fn().mockResolvedValue({}),
     find: jest.fn().mockResolvedValue([{ title: 'test event' }]),
     preload: jest.fn().mockResolvedValue({ categories: [{ id: 1 }] }),
+    findAndCount: jest.fn().mockResolvedValue([[], 0]),
   }),
 });
 
