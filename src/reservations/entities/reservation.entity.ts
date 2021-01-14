@@ -7,6 +7,7 @@ import {
 } from 'typeorm';
 import { Event } from '@/events/entities/event.entity';
 import { User } from '@/users/entities/user.entity';
+import { Exclude } from 'class-transformer';
 
 @Entity()
 @Index(['userId', 'eventId'], { unique: true })
@@ -15,9 +16,11 @@ export class Reservation {
   public id: number;
 
   @Column()
+  @Exclude()
   public eventId: number;
 
   @Column()
+  @Exclude()
   public userId: number;
 
   @ManyToOne(() => Event, (event) => event.reservations)

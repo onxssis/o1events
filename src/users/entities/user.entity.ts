@@ -3,7 +3,7 @@ import * as bcrypt from 'bcrypt';
 
 import { CoreEntity } from '@/common/entities/core.entity';
 import { Reservation } from '@/reservations/entities/reservation.entity';
-import { Exclude } from 'class-transformer';
+import { Exclude, Expose } from 'class-transformer';
 
 @Entity()
 export class User extends CoreEntity {
@@ -24,6 +24,12 @@ export class User extends CoreEntity {
     onDelete: 'CASCADE',
   })
   public reservations: Reservation[];
+
+  @Expose()
+  get initials(): string {
+    const halves = this.name.split(' ');
+    return `${halves[0][0]}${halves[1][0]}`;
+  }
 
   @BeforeInsert()
   @BeforeUpdate()

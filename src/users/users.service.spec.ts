@@ -93,7 +93,9 @@ describe('UsersService', () => {
       expect(usersRepository.findOne).toHaveBeenCalledTimes(1);
       expect(result).toMatchObject(user);
     });
+  });
 
+  describe('Entity methods/properties', () => {
     it('should call the hashPassword method on the Entity', () => {
       const user = new User();
       const password = 'password';
@@ -109,6 +111,15 @@ describe('UsersService', () => {
       user.hashPassword();
 
       expect(user.password).toBeUndefined();
+    });
+
+    it('should call the initails getter method', () => {
+      const user = new User();
+      user.name = 'Jamie Lee';
+
+      const initials = user.initials;
+
+      expect(initials).toBe('JL');
     });
   });
 });
