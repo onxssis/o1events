@@ -12,7 +12,6 @@ export class AuthService {
   constructor(
     private usersService: UsersService,
     private jwtService: JwtService,
-    private configService: ConfigService,
   ) {}
 
   async authenticateUser({ email, password }: AuthenticateUserDto) {
@@ -39,9 +38,7 @@ export class AuthService {
 
     return {
       user,
-      access_token: this.jwtService.sign(payload, {
-        expiresIn: this.configService.get('JWT_ACCESS_TOKEN_EXPIRATION'),
-      }),
+      access_token: this.jwtService.sign(payload),
     };
   }
 

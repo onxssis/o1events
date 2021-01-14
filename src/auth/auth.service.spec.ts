@@ -98,15 +98,11 @@ describe('AuthService', () => {
     it('should log a user in and return access_token', async () => {
       const result = await service.login(dummyUser);
 
-      expect(configService.get).toHaveBeenCalledTimes(1);
       expect(jwtService.sign).toHaveBeenCalledTimes(1);
-      expect(jwtService.sign).toHaveBeenCalledWith(
-        {
-          email: dummyUser.email,
-          sub: dummyUser.id,
-        },
-        { expiresIn: '7h' },
-      );
+      expect(jwtService.sign).toHaveBeenCalledWith({
+        email: dummyUser.email,
+        sub: dummyUser.id,
+      });
       expect(result).toMatchObject({
         user: dummyUser,
         access_token: 'signed-token',
