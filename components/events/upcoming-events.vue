@@ -1,24 +1,37 @@
 <template>
-  <div class="max-w-container mx-auto my-4">
-    <div class="flex justify-between items-center mb-6">
-      <h2 class="font-semibold text-2xl xl:text-4xl">Upcoming Events</h2>
-      <a href="" class="text-royal hover:underline hidden md:inline-flex"
-        >See all</a
-      >
-    </div>
-
-    <div class="flex flex-nowrap overflow-x-auto">
-      <event-card-alt></event-card-alt>
-      <!-- <event-card-alt></event-card-alt> -->
-    </div>
-
-    <a href="" class="md:hidden text-royal hover:underline">See all events</a>
-  </div>
+  <base-section
+    v-slot="slotProps"
+    heading="Upcoming Events"
+    :loading="$fetchState.pending"
+    :data="events"
+  >
+    <event-card-alt :data="slotProps.data" />
+  </base-section>
 </template>
 
 <script lang="ts">
 import { Vue, Component } from 'nuxt-property-decorator'
 
 @Component
-export default class BaseSection extends Vue {}
+export default class UpcomingEvents extends Vue {
+  events = []
+
+  async fetch() {
+    const { data } = await this.$axios.get('/events/upcoming')
+
+    this.events = data
+  }
+}
 </script>
+
+<style>
+.h-scroll {
+  display: grid;
+  max-width: 1200px;
+  grid-gap: 20px;
+  grid-template-columns: repeat(7, 280px);
+  padding: 20px 10px;
+
+  overflow-x: auto;
+}
+</style>

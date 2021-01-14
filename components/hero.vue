@@ -1,5 +1,5 @@
 <template>
-  <div class="max-w-mini xl:max-w-screen-xl mx-auto">
+  <div class="max-w-mini xl:max-w-screen-xl mx-auto px-4">
     <div class="lg:grid lg:grid-cols-2 items-center">
       <div class="md:text-center lg:text-left">
         <h1
