@@ -12,7 +12,7 @@ export default Vue.extend({
 })
 </script>
 
-<style scoped>
+<style>
 .wrapper {
   min-height: calc(100vh - 64px);
 }

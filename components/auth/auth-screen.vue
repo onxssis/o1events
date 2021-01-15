@@ -82,10 +82,7 @@
         </base-input>
 
         <div class="flex w-full">
-          <button
-            type="submit"
-            class="flex items-center justify-center focus:outline-none text-white text-sm sm:text-base bg-primary hover:bg-primary-dark rounded py-2 w-full transition duration-150 ease-in"
-          >
+          <button type="submit" class="button w-full">
             <span class="mr-2 text-base">{{ buttonText }}</span>
             <span>
               <svg

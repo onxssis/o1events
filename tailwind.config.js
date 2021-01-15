@@ -40,6 +40,7 @@ module.exports = {
       maxWidth: {
         container: '1200px',
         mini: '1024px',
+        fit: 'fit-content',
       },
       spacing: {
         84: '21rem',
@@ -53,5 +54,5 @@ module.exports = {
   variants: {
     extend: {},
   },
-  plugins: [],
+  plugins: [require('@tailwindcss/forms')],
 }

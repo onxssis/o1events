@@ -1,7 +1,7 @@
 <template>
   <nav class="bg-white px-4 md:px-0">
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-6">
-      <div class="flex justify-between h-16">
+      <div class="flex justify-between items-center h-16">
         <div class="flex">
           <div class="flex-shrink-0 flex items-center">
             <h1 class="font-display">
@@ -9,8 +9,8 @@
             </h1>
           </div>
         </div>
-        <div class="hidden sm:ml-6 sm:flex sm:items-center">
-          <div v-if="$auth.loggedIn === false">
+        <div class="hidden md:ml-6 md:flex md:items-center">
+          <div v-if="$auth.loggedIn === false" class="flex items-center">
             <NuxtLink
               to="/login"
               class="inline-flex py-2 px-3 text-gray-900 hover:text-primary"
@@ -24,13 +24,19 @@
               Sign up
             </NuxtLink>
           </div>
-
           <div
             v-if="$auth.loggedIn && $auth.user"
             class="auth flex items-center"
           >
             <button
-              class="p-1 border-2 border-transparent text-gray-400 rounded-full hover:text-gray-500 focus:outline-none focus:text-gray-500 focus:bg-gray-100 transition duration-150 ease-in-out"
+              v-if="$auth.user.isAdmin"
+              class="button md:px-4"
+              @click.prevent="createEvent"
+            >
+              Create Event
+            </button>
+            <button
+              class="p-1 ml-6 border-2 border-transparent text-gray-400 rounded-full hover:text-gray-500 focus:outline-none focus:text-gray-500 focus:bg-gray-100 transition duration-150 ease-in-out"
             >
               <svg
                 class="h-6 w-6"
@@ -142,6 +148,10 @@ import { Component, Vue } from 'nuxt-property-decorator'
 })
 export default class Header extends Vue {
   open = false
+
+  async createEvent() {
+    await this.$router.push('/events/create')
+  }
 
   async logout() {
     await this.$auth.logout()

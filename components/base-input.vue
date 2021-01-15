@@ -1,10 +1,8 @@
 <template>
   <div class="flex flex-col mb-6">
-    <label
-      v-if="label"
-      class="mb-1 text-xs sm:text-sm tracking-wide text-gray-600"
-      >{{ label }}</label
-    >
+    <label v-if="label" class="mb-1 block text-sm font-medium text-gray-700">{{
+      label
+    }}</label>
     <div class="relative">
       <div
         v-if="hasIconSlot"
@@ -14,7 +12,7 @@
       </div>
 
       <input
-        class="text-sm sm:text-base placeholder-gray-500 pl-4 pr-4 rounded-lg border border-gray-400 w-full py-2 focus:outline-none focus:border-primary"
+        class="text-sm sm:text-base placeholder-gray-500 pl-3 pr-4 rounded-lg border border-gray-300 w-full py-2 focus:outline-none focus:border-primary"
         :class="{ 'pl-10': hasIconSlot }"
         v-bind="$attrs"
         :value="value"
