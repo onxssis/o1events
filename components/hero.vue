@@ -19,11 +19,7 @@
       </div>
 
       <div class="hero-image mt-6 md:hidden lg:block xl:max-w-xl">
-        <img
-          src="~/assets/images/icons/festivities_4.svg"
-          alt=""
-          class="ml-auto"
-        />
+        <hero-svg class="text-primary" />
       </div>
     </div>
   </div>

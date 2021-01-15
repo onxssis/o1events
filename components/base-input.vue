@@ -14,7 +14,7 @@
       </div>
 
       <input
-        class="text-sm sm:text-base placeholder-gray-500 pl-4 pr-4 rounded-lg border border-gray-400 w-full py-2 focus:outline-none focus:border-carrot"
+        class="text-sm sm:text-base placeholder-gray-500 pl-4 pr-4 rounded-lg border border-gray-400 w-full py-2 focus:outline-none focus:border-primary"
         :class="{ 'pl-10': hasIconSlot }"
         v-bind="$attrs"
         :value="value"

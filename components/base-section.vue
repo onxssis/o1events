@@ -5,7 +5,7 @@
       <NuxtLink
         v-if="seeAll"
         :to="seeAllLink"
-        class="text-carrot-dark hover:underline hidden md:inline-flex"
+        class="text-primary-dark hover:underline hidden md:inline-flex"
         >See all</NuxtLink
       >
     </div>
@@ -21,7 +21,7 @@
     <div v-if="seeAll" class="text-center mt-8">
       <NuxtLink
         :to="seeAllLink"
-        class="md:hidden text-carrot-dark hover:underline"
+        class="md:hidden text-primary-dark hover:underline"
         >See all events</NuxtLink
       >
     </div>

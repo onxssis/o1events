@@ -20,10 +20,17 @@ module.exports = {
         carrot: {
           darkest: '#fef4e9',
           dark: '#e69045',
-          DEFAULT: '#ffa04d',
+          DEFAULT: '#fa9628',
           light: '#ffe7d3',
           lightest: '#fef4e9',
           alt: '#4d96ff',
+        },
+        primary: {
+          darkest: '#3d0a56',
+          dark: '#6a1196',
+          DEFAULT: '#9818d6',
+          light: '#cc8ceb',
+          lightest: '#ead1f7',
         },
       },
       fontFamily: {

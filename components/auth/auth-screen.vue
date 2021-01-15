@@ -84,7 +84,7 @@
         <div class="flex w-full">
           <button
             type="submit"
-            class="flex items-center justify-center focus:outline-none text-white text-sm sm:text-base bg-carrot hover:bg-carrot-dark rounded py-2 w-full transition duration-150 ease-in"
+            class="flex items-center justify-center focus:outline-none text-white text-sm sm:text-base bg-primary hover:bg-primary-dark rounded py-2 w-full transition duration-150 ease-in"
           >
             <span class="mr-2 text-base">{{ buttonText }}</span>
             <span>
@@ -109,7 +109,7 @@
     <div class="flex justify-center items-center mt-6">
       <NuxtLink
         :to="toggleRoute"
-        class="inline-flex items-center font-bold text-carrot hover:text-carrot-dark text-xs text-center"
+        class="inline-flex items-center font-bold text-primary hover:text-primary-dark text-xs text-center"
       >
         <span class="ml-2">{{ toggleText }}</span>
       </NuxtLink>

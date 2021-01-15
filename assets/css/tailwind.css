@@ -17,4 +17,12 @@
   h6 {
     font-family: 'Graphik';
   }
+
+  a.nuxt-link-active {
+    @apply font-medium;
+  }
+
+  a.nuxt-link-exact-active {
+    @apply text-red-200;
+  }
 }

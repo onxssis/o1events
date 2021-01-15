@@ -13,11 +13,14 @@
           <div v-if="$auth.loggedIn === false">
             <NuxtLink
               to="/login"
-              class="inline-flex py-2 px-3 text-gray-900 hover:text-carrot"
+              class="inline-flex py-2 px-3 text-gray-900 hover:text-primary"
             >
               Log in
             </NuxtLink>
-            <NuxtLink class="inline-flex py-2 px-3" to="/register">
+            <NuxtLink
+              class="inline-flex py-2 px-3 hover:text-primary"
+              to="/register"
+            >
               Sign up
             </NuxtLink>
           </div>
