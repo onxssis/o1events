@@ -17,8 +17,8 @@ export class User extends CoreEntity {
   @Exclude()
   password: string;
 
-  @Column({ default: false })
-  is_admin: boolean;
+  @Column({ default: false, name: 'is_admin' })
+  isAdmin: boolean;
 
   @OneToMany(() => Reservation, (reservation) => reservation.user, {
     onDelete: 'CASCADE',

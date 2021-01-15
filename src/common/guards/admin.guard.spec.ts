@@ -5,7 +5,7 @@ describe('AdminGuard', () => {
   let adminGuard: AdminGuard;
   const executionContext: any = {
     switchToHttp: () => ({
-      getRequest: () => ({ user: { is_admin: false } }),
+      getRequest: () => ({ user: { isAdmin: false } }),
     }),
   };
 

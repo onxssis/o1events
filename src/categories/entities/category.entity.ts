@@ -19,6 +19,9 @@ export class Category extends CoreEntity {
   @Column({ type: 'text', nullable: true })
   description?: string;
 
+  @Column({ nullable: true })
+  cover: string;
+
   @BeforeInsert()
   @BeforeUpdate()
   slugify() {

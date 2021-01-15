@@ -46,7 +46,7 @@ describe('UsersService', () => {
       name: 'John Appleseed',
       email: 'john@appleseed.com',
       password: 'password',
-      is_admin: false,
+      isAdmin: false,
     };
 
     it('should fail if user exists', async () => {

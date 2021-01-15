@@ -8,4 +8,8 @@ export class CreateCategoryDto {
   @IsString()
   @IsOptional()
   readonly description?: string;
+
+  @IsString()
+  @IsOptional()
+  readonly cover?: string;
 }

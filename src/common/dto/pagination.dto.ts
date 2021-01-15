@@ -1,6 +1,7 @@
 import { IsOptional } from 'class-validator';
+import { FilterQueryDto } from './filter.dto';
 
-export class PaginationQueryDto {
+export class PaginationQueryDto extends FilterQueryDto {
   @IsOptional()
   page?: number;
 

@@ -20,5 +20,5 @@ export class CreateUserDto {
 
   @IsBoolean()
   @IsOptional()
-  readonly is_admin?: boolean;
+  readonly isAdmin?: boolean;
 }

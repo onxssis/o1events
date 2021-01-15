@@ -7,7 +7,7 @@ define(User, (faker: typeof Faker) => {
 
   user.name = faker.name.findName();
   user.email = faker.internet.email();
-  user.is_admin = false;
+  user.isAdmin = false;
   user.password = faker.internet.password(8);
 
   return user;

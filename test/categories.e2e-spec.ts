@@ -53,7 +53,7 @@ describe('CategoriesController (e2e)', () => {
     });
 
     it('should not allow non admin user create category', async () => {
-      const response = await publishCategory({}, { is_admin: false });
+      const response = await publishCategory({}, { isAdmin: false });
 
       expect(response.status).toEqual(HttpStatus.FORBIDDEN);
       expect(response.body.message).toEqual('Forbidden resource');
@@ -103,7 +103,7 @@ describe('CategoriesController (e2e)', () => {
     it('should allow admin user delete category', async () => {
       const category = await factory(Category).create();
 
-      await authenticateUser({ is_admin: true });
+      await authenticateUser({ isAdmin: true });
 
       const response = await request(app.getHttpServer())
         .delete(`/categories/${category.id}`)
@@ -144,7 +144,7 @@ describe('CategoriesController (e2e)', () => {
     it('should allow admin user update category', async () => {
       const category = await factory(Category).create();
 
-      await authenticateUser({ is_admin: true });
+      await authenticateUser({ isAdmin: true });
 
       const response = await request(app.getHttpServer())
         .put(`/categories/${category.id}`)
@@ -163,7 +163,7 @@ describe('CategoriesController (e2e)', () => {
   ) {
     const user = await factory(User).create({
       password: 'pass@erd',
-      is_admin: true,
+      isAdmin: true,
       ...userOverrides,
     });
 

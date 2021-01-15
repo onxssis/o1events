@@ -64,7 +64,7 @@ describe('EventsController (e2e)', () => {
     });
 
     it('should not allow non admin user create event', async () => {
-      const response = await publishEvent({}, { is_admin: false });
+      const response = await publishEvent({}, { isAdmin: false });
 
       expect(response.status).toEqual(HttpStatus.FORBIDDEN);
       expect(response.body.message).toEqual('Forbidden resource');
@@ -114,7 +114,7 @@ describe('EventsController (e2e)', () => {
     it('should allow admin user delete event', async () => {
       const event = await factory(Event).create();
 
-      await authenticateUser({ is_admin: true });
+      await authenticateUser({ isAdmin: true });
 
       const response = await request(app.getHttpServer())
         .delete(`/events/${event.id}`)
@@ -155,7 +155,7 @@ describe('EventsController (e2e)', () => {
     it('should allow admin user update event', async () => {
       const event = await factory(Event).create();
 
-      await authenticateUser({ is_admin: true });
+      await authenticateUser({ isAdmin: true });
 
       const response = await request(app.getHttpServer())
         .put(`/events/${event.id}`)
@@ -174,7 +174,7 @@ describe('EventsController (e2e)', () => {
   ) {
     const user = await factory(User).create({
       password: 'pass@erd',
-      is_admin: true,
+      isAdmin: true,
       ...userOverrides,
     });
 

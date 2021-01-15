@@ -1,4 +1,11 @@
-import { Connection, EntityRepository, LessThan, MoreThan } from 'typeorm';
+import {
+  Between,
+  Connection,
+  EntityRepository,
+  LessThan,
+  MoreThan,
+  Raw,
+} from 'typeorm';
 import { Event } from '@/events/entities/event.entity';
 import { IEventRepository } from '../event.repository';
 import { CreateEventDto } from '@/events/dto/create-event.dto';
