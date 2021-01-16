@@ -1,5 +1,6 @@
 export default {
-  // Global page headers (https://go.nuxtjs.dev/config-head)
+  mode: 'universal',
+
   head: {
     title: 'frontend',
     meta: [
@@ -14,7 +15,10 @@ export default {
   css: [],
 
   // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
-  plugins: [],
+  plugins: [
+    '~/plugins/vue-ctk-datepicker.ts',
+    { src: '~/plugins/google-maps', ssr: true },
+  ],
 
   // Auto import components (https://go.nuxtjs.dev/config-components)
   components: true,
@@ -37,15 +41,16 @@ export default {
     axios: {
       browserBaseURL: process.env.BROWSER_BASE_URL,
     },
+    gMapsApiKey: process.env.GMAPS_API_KEY,
   },
 
   privateRuntimeConfig: {
     axios: {
-      baseURL: process.env.BASE_URL,
+      baseURL: process.env.API_BASE_URL,
     },
   },
 
-  loading: { color: '#ffa04d', throttle: 0 },
+  loading: { color: '#9818d6', throttle: 0 },
 
   auth: {
     redirect: {
@@ -81,5 +86,7 @@ export default {
   },
 
   // Build Configuration (https://go.nuxtjs.dev/config-build)
-  build: {},
+  build: {
+    transpile: [/^vue2-google-maps($|\/)/],
+  },
 }

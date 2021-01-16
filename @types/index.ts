@@ -1,7 +1,12 @@
 interface BaseModel {
   id: number
-  createdAt: Date
-  updatedAt: Date
+  createdAt: string
+  updatedAt: string
+}
+
+export enum EventType {
+  online = 'online',
+  person = 'person',
 }
 
 export interface IEvent extends BaseModel {
@@ -24,23 +29,17 @@ export interface IEvent extends BaseModel {
 export interface IEventDto {
   title: string
   description: string
-  location: string
+  address?: string
   lng?: number
   lat?: number
   cover?: string | null
   premium?: boolean
-  startDate: Date
-  endDate: Date
+  startDate: string
+  endDate: string
   price?: number
   type?: EventType
   categories?: []
 }
-
-export enum EventType {
-  online = 'online',
-  person = 'person',
-}
-
 export interface ICategory extends BaseModel {
   name: string
   slug: string
