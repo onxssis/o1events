@@ -1,4 +1,3 @@
-import { Category } from '@/categories/entities/category.entity';
 import {
   IsLatitude,
   IsLongitude,
@@ -8,7 +7,9 @@ import {
   IsNumber,
   IsDateString,
   IsArray,
+  IsEnum,
 } from 'class-validator';
+import { EventType } from '../entities/event.entity';
 
 export class CreateEventDto {
   @IsString()
@@ -32,6 +33,10 @@ export class CreateEventDto {
   @IsOptional()
   @IsNumber()
   readonly price?: number;
+
+  @IsOptional()
+  @IsEnum(EventType)
+  readonly type?: EventType;
 
   @IsDateString()
   readonly startDate: Date | string;
