@@ -1,10 +1,8 @@
 import {
-  Between,
   Connection,
   EntityRepository,
   LessThan,
-  MoreThan,
-  Raw,
+  MoreThanOrEqual,
 } from 'typeorm';
 import { Event } from '@/events/entities/event.entity';
 import { IEventRepository } from '../event.repository';
@@ -55,14 +53,14 @@ export class EventRepository implements IEventRepository {
 
   async getUpcomingEvents(limit = 5) {
     return this.repo.find({
-      where: { startDate: MoreThan(new Date()) },
+      where: { startDate: MoreThanOrEqual(new Date(Date.now()).toISOString()) },
       take: limit,
     });
   }
 
   async getPastEvents(limit = 5) {
     return this.repo.find({
-      where: { startDate: LessThan(new Date()) },
+      where: { startDate: LessThan(new Date(Date.now()).toISOString()) },
       take: limit,
     });
   }

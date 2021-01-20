@@ -29,8 +29,8 @@ export class Event extends CoreEntity {
   @Column({ type: 'text' })
   description: string;
 
-  @Column()
-  location: string;
+  @Column({ nullable: true })
+  address?: string;
 
   @Column({ nullable: true, type: 'real' })
   lng?: string;
@@ -63,6 +63,9 @@ export class Event extends CoreEntity {
 
   @Column({ type: 'enum', enum: EventType, default: EventType.PERSON })
   type: EventType;
+
+  @Column({ nullable: true })
+  link?: string;
 
   @ManyToMany(() => Category, { eager: true, onDelete: 'CASCADE' })
   @JoinTable()

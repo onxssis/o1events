@@ -8,6 +8,7 @@ import {
   IsDateString,
   IsArray,
   IsEnum,
+  IsNotEmpty,
 } from 'class-validator';
 import { EventType } from '../entities/event.entity';
 
@@ -20,9 +21,10 @@ export class CreateEventDto {
   @Length(4)
   readonly description: string;
 
-  @IsString()
-  @Length(2)
-  readonly location: string;
+  @IsOptional()
+  @IsString({ message: 'location must be a string' })
+  @IsNotEmpty({ message: 'location should not be empty' })
+  readonly address?: string;
 
   @IsLatitude()
   readonly lat: string;
@@ -34,14 +36,13 @@ export class CreateEventDto {
   @IsNumber()
   readonly price?: number;
 
-  @IsOptional()
-  @IsEnum(EventType)
+  @IsEnum(EventType, { message: 'type must be online or in person' })
   readonly type?: EventType;
 
-  @IsDateString()
+  @IsDateString({ message: 'start date must be a valid date' })
   readonly startDate: Date | string;
 
-  @IsDateString()
+  @IsDateString({ message: 'end date must be a valid date' })
   readonly endDate: Date | string;
 
   @IsArray()
