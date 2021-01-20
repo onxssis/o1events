@@ -39,6 +39,8 @@ export interface IEventDto {
   price?: number
   type?: EventType
   categories?: []
+  availableSlots?: number
+  link?: string
 }
 export interface ICategory extends BaseModel {
   name: string

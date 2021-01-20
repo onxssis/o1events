@@ -15,16 +15,13 @@
       </div>
       <div class="mid px-3 pt-6">
         <p class="uppercase text-sm mb-2 text-yellow-700">
-          Sat, Jan 22, 11:08 pm
+          {{ formattedStartDate }}
         </p>
 
         <p class="font-medium">{{ data.title }}</p>
 
         <p class="text-sm mt-4 flex items-center break-words">
-          <span
-            >{{ data.location }} ifo frn[ 0ohr490 220r24jonf 30rewfer ifo erfirf
-            f</span
-          >
+          <span>{{ data.address }}</span>
         </p>
       </div>
       <div class="bottom px-3 mt-auto flex justify-between items-center">
@@ -76,10 +73,12 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'nuxt-property-decorator'
+import format from 'date-fns/format'
+import { IEvent } from '~/@types'
 
 @Component
 export default class EventCardAlt extends Vue {
-  @Prop({ required: true }) readonly data!: any
+  @Prop({ required: true }) readonly data!: IEvent
 
   get hasReservations() {
     return this.data.reservations.length > 0
@@ -87,6 +86,10 @@ export default class EventCardAlt extends Vue {
 
   get reservations() {
     return this.data.reservations.slice(0, 3)
+  }
+
+  get formattedStartDate() {
+    return format(new Date(this.data.startDate), 'eee, MMM dd, ppp')
   }
 }
 </script>

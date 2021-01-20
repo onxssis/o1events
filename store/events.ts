@@ -1,9 +1,7 @@
 import { GetterTree, ActionTree, MutationTree } from 'vuex'
-import { IEventDto } from '~/@types'
 
-// reusable aliases for mutations
 export const EVENT_MUTATIONS = {
-  CREATE_EVENT: 'CREATE_EVENT',
+  SET_EVENT: 'SET_EVENT',
 }
 
 export const state = () => ({
@@ -14,19 +12,16 @@ export const state = () => ({
 export type RootState = ReturnType<typeof state>
 
 export const mutations: MutationTree<RootState> = {
-  // store the logged in user in the state
-  [EVENT_MUTATIONS.CREATE_EVENT](localState, { event }: { event: any }) {
+  [EVENT_MUTATIONS.SET_EVENT](localState, event: { event: any }) {
     localState.event = event
   },
 }
 
 export const actions: ActionTree<RootState, RootState> = {
-  async create({ commit }, eventDto: IEventDto) {
-    // make an API call to login the user with an email address and password
-    const { data } = await this.$axios.post('/events', eventDto)
+  async get({ commit }, slug: string) {
+    const { data } = await this.$axios.get(`/events/${slug}`)
 
-    // commit the user and tokens to the state
-    commit(EVENT_MUTATIONS.CREATE_EVENT, data)
+    commit(EVENT_MUTATIONS.SET_EVENT, data)
   },
 }
 

@@ -16,6 +16,7 @@
     "@nuxtjs/axios": "^5.12.5",
     "@tailwindcss/forms": "^0.2.1",
     "core-js": "^3.6.5",
+    "date-fns": "^2.16.1",
     "nuxt": "^2.14.6",
     "nuxt-property-decorator": "^2.8.8",
     "vue-ctk-date-time-picker": "^2.5.0",

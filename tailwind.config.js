@@ -15,7 +15,7 @@ module.exports = {
           dark: '#6a1196',
           DEFAULT: '#9818d6',
           light: '#cc8ceb',
-          lightest: '#ead1f7',
+          lightest: '#f8f6ff',
         },
         carrot: {
           darkest: '#fef4e9',
@@ -30,7 +30,7 @@ module.exports = {
           dark: '#6a1196',
           DEFAULT: '#9818d6',
           light: '#cc8ceb',
-          lightest: '#ead1f7',
+          lightest: '#f8f6ff',
         },
       },
       fontFamily: {

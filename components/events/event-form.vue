@@ -1,0 +1,332 @@
+<template>
+  <fragment>
+    <error-alert v-if="errors.length" :errors="errors" />
+    <div class="bg-white border shadow md:shadow-md rounded-lg">
+      <form method="POST" @submit.prevent="submitForm">
+        <div class="rounded-lg">
+          <div class="px-4 py-5 bg-white sm:p-6 rounded-lg">
+            <div class="grid grid-cols-3 md:gap-6">
+              <div class="col-span-3 md:col-span-2">
+                <base-input
+                  v-model="eventDto.title"
+                  label="Title"
+                  name="title"
+                  placeholder="Title of the event"
+                  required="true"
+                />
+              </div>
+
+              <div class="flex flex-col mb-6 col-span-3 md:col-span-1">
+                <label for="type" class="mb-1 text-sm font-medium text-gray-700"
+                  >Type</label
+                >
+                <div class="border border-gray-300 rounded-lg flex relative">
+                  <select
+                    id="type"
+                    v-model="eventDto.type"
+                    name="type"
+                    required
+                    class="bg-transparent appearance-none pl-3 py-2 w-full text-sm sm:text-base border border-transparent focus:outline-none focus:border-primary text-gray-800 rounded"
+                  >
+                    <option :value="''" disabled hidden>Choose one</option>
+                    <option value="online">Online</option>
+                    <option value="person">In Person</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-4 gap-4 md:gap-6 mb-6">
+              <div class="col-span-2">
+                <label class="mb-1 text-sm font-medium text-gray-700"
+                  >Event starts</label
+                >
+                <VueCtkDateTimePicker
+                  id="startDatePicker"
+                  v-model="eventDto.startDate"
+                  color="#9818d6"
+                  :no-label="true"
+                  output-format="YYYY-MM-DDTHH:mm:ss.sssZ"
+                  format="YYYY-MM-DDTHH:mm:ss.sssZ"
+                  :min-date="new Date(Date.now()).toISOString()"
+                >
+                </VueCtkDateTimePicker>
+              </div>
+
+              <div class="col-span-2">
+                <label class="mb-1 text-sm font-medium text-gray-700"
+                  >Event ends</label
+                >
+
+                <VueCtkDateTimePicker
+                  id="endDatePicker"
+                  v-model="eventDto.endDate"
+                  color="#9818d6"
+                  :no-label="true"
+                  output-format="YYYY-MM-DDTHH:mm:ss.sssZ"
+                  format="YYYY-MM-DDTHH:mm:ss.sssZ"
+                  :min-date="minEndDate"
+                >
+                </VueCtkDateTimePicker>
+              </div>
+            </div>
+
+            <div
+              class="grid gap-4 md:gap-6"
+              :class="{ 'grid-cols-5': !isOnline, 'grid-cols-4': isOnline }"
+            >
+              <div v-if="!isOnline" class="col-span-3">
+                <label class="mb-1 text-sm font-medium text-gray-700"
+                  >Location</label
+                >
+
+                <gmap-autocomplete
+                  class="text-sm sm:text-base placeholder-gray-500 pl-3 pr-4 rounded-lg border border-gray-300 w-full py-2 focus:outline-none focus:border-primary"
+                  placeholder="Location of the event"
+                  type="text"
+                  :options="{ fields: ['geometry', 'formatted_address'] }"
+                  @place_changed="setAddress"
+                  @keypress.enter="$event.preventDefault()"
+                >
+                </gmap-autocomplete>
+              </div>
+
+              <div v-if="isOnline" class="col-span-3">
+                <base-input
+                  v-model="eventDto.link"
+                  label="Link"
+                  name="link"
+                  placeholder="Link to join event"
+                  required="true"
+                  type="text"
+                />
+              </div>
+
+              <div v-if="!isOnline" class="col-span-1">
+                <base-input
+                  v-model.number="eventDto.price"
+                  type="number"
+                  label="Price"
+                  help="0 = free"
+                >
+                  <template v-slot:icon>
+                    <span class="text-gray-500 sm:text-sm"> $ </span>
+                  </template>
+                </base-input>
+              </div>
+
+              <div class="col-span-1">
+                <base-input
+                  v-model.number="eventDto.availableSlots"
+                  label="Slots"
+                  placeholder="Available seats"
+                  required
+                  min="1"
+                  type="number"
+                />
+              </div>
+            </div>
+
+            <base-text-area
+              id="description"
+              v-model="eventDto.description"
+              label="Description"
+              name="description"
+              rows="3"
+              placeholder="Brief description for your event. URLs are hyperlinked."
+            ></base-text-area>
+
+            <div class="grid grid-cols-3 gap-4 md:gap-6 mb-6 items-center">
+              <div class="col-span-3 md:col-span-1">
+                <label class="block text-sm font-medium text-gray-700">
+                  Cover
+                </label>
+                <div class="mt-2 flex items-center">
+                  <div class="overflow-hidden relative w-full">
+                    <label
+                      type="button"
+                      class="bg-white py-2 px-3 border border-gray-300 rounded-md text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 cursor-pointer focus:outline-none"
+                    >
+                      Choose
+                      <input
+                        class="absolute w-full block top-0 left-0 opacity-0 cursor-pointer"
+                        type="file"
+                        name="vacancyImageFiles"
+                        @change="uploadCover"
+                      />
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-span-3 md:col-span-2">
+                <label class="block text-sm font-medium text-gray-700 mb-1">
+                  Categories/Tags
+                </label>
+                <multi-select
+                  v-model="eventDto.categories"
+                  :multiple="true"
+                  label="name"
+                  track-by="id"
+                  :close-on-select="true"
+                  :options="selectOptions"
+                />
+              </div>
+            </div>
+          </div>
+          <div class="px-4 py-3 bg-gray-50 text-right sm:px-6 rounded-b-lg">
+            <button
+              type="submit"
+              class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-primary hover:bg-primary-dark focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-primary"
+            >
+              Save
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </fragment>
+</template>
+
+<script lang="ts">
+import { Vue, Component, namespace } from 'nuxt-property-decorator'
+import VueCtkDateTimePicker from 'vue-ctk-date-time-picker'
+import { Fragment } from 'vue-fragment'
+import MultiSelect from 'vue-multiselect'
+import ErrorAlert from '../ui/error-alert.vue'
+import { ICategory, IEventDto } from '~/@types'
+import { deleteObjectProps } from '~/utils'
+
+const categoryStore = namespace('categories')
+const initialFormState = {
+  categories: [] as any,
+  startDate: '',
+  endDate: '',
+  title: '',
+  description: '',
+  address: '',
+  cover: null,
+  price: 0,
+  lng: 0,
+  lat: 0,
+  type: '',
+  availableSlots: 1,
+  link: '',
+}
+
+@Component({
+  components: { VueCtkDateTimePicker, MultiSelect, Fragment, ErrorAlert },
+})
+export default class EventForm extends Vue {
+  @categoryStore.State('categories')
+  selectOptions!: ICategory[]
+
+  eventDto: IEventDto = initialFormState
+  errors: string[] = []
+
+  get minEndDate() {
+    return new Date(this.eventDto.startDate || Date.now()).toISOString()
+  }
+
+  get isOnline() {
+    return this.eventDto.type === 'online'
+  }
+
+  setAddress(place: any) {
+    this.eventDto.address = place.formatted_address
+    this.eventDto.lng = place.geometry.location.lng()
+    this.eventDto.lat = place.geometry.location.lat()
+  }
+
+  async uploadCover(e) {
+    const files = e.target.files
+    const form = new FormData()
+    form.append('file', files[0])
+    form.append('upload_preset', 'sickfits')
+
+    const { data } = await this.$axios.post(
+      'https://api.cloudinary.com/v1_1/onxssis/image/upload',
+      form
+    )
+
+    console.log(data)
+  }
+
+  async submitForm() {
+    try {
+      this.filterForm()
+
+      await this.$axios.post('/events', this.eventDto)
+      this.resetForm()
+    } catch (error) {
+      if (error.response) {
+        const message = error.response.data.message
+
+        this.errors = Array.isArray(message) ? message : [message]
+      } else {
+        this.errors = ['An unexpected error occured. Please try again!']
+      }
+    }
+  }
+
+  filterForm() {
+    if (this.isOnline) {
+      deleteObjectProps(this.eventDto, ['address', 'lat', 'lng'])
+    } else {
+      deleteObjectProps(this.eventDto, ['link'])
+    }
+  }
+
+  resetForm() {
+    this.eventDto.title = ''
+    this.eventDto.description = ''
+    this.eventDto.startDate = ''
+    this.eventDto.endDate = ''
+    this.eventDto.address = ''
+    this.eventDto.link = ''
+    this.eventDto.lng = 0
+    this.eventDto.lat = 0
+    this.eventDto.availableSlots = 1
+    this.eventDto.type = ''
+    this.eventDto.price = 0
+    this.eventDto.categories = []
+    this.eventDto.cover = null
+  }
+}
+</script>
+
+<style>
+@import 'vue-multiselect/dist/vue-multiselect.min.css';
+
+#startDatePicker-input,
+#endDatePicker-input {
+  @apply text-base font-body;
+}
+
+.multiselect__select {
+  @apply hidden;
+}
+
+.multiselect__option--highlight,
+.multiselect__option--highlight:after {
+  @apply bg-primary;
+}
+
+.multiselect__tag {
+  @apply bg-primary;
+}
+
+.multiselect__tag-icon::after {
+  @apply text-primary-darkest;
+}
+
+.multiselect__tags {
+  @apply focus:ring-primary focus:border-primary mt-1 block w-full border-gray-300 rounded-md placeholder-gray-400;
+}
+
+.multiselect__spinner::before,
+.multiselect__spinner::after {
+  @apply border-primary;
+  border-top-color: #9818d6;
+}
+</style>

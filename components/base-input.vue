@@ -21,6 +21,7 @@
         @input="$emit('update', $event.target.value)"
       />
     </div>
+    <p v-if="help" class="text-xs mt-1 ml-px text-gray-500">{{ help }}</p>
   </div>
 </template>
 
@@ -49,6 +50,7 @@ const includes = (types: string[]) => (type: string) => types.includes(type)
 export default class BaseInput extends Vue {
   @Prop() value!: any
   @Prop() label!: string
+  @Prop({ default: '' }) help?: string
   @Prop({
     default: 'text',
     validator(value) {
