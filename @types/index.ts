@@ -9,21 +9,32 @@ export enum EventType {
   person = 'person',
 }
 
+export interface IUser extends BaseModel {
+  name: string
+  email: string
+  isAdmin: boolean
+}
+
 export interface IEvent extends BaseModel {
   title: string
   slug: string
   description: string
-  location: string
+  address: string
   lng: number
   lat: number
   cover: string | null
   premium: boolean
-  startDate: Date
-  endDate: Date
+  startDate: string
+  endDate: string
   price: number
   type: EventType
-  categories: []
-  reservations: []
+  categories: any[]
+  reservations: [
+    {
+      id: string
+      user: IUser
+    }
+  ]
 }
 
 export interface IEventDto {
@@ -37,8 +48,8 @@ export interface IEventDto {
   startDate: string
   endDate: string
   price?: number
-  type?: EventType
-  categories?: []
+  type?: EventType | string
+  categories: any[]
   availableSlots?: number
   link?: string
 }
@@ -46,10 +57,4 @@ export interface ICategory extends BaseModel {
   name: string
   slug: string
   description: string | null
-}
-
-export interface IUser extends BaseModel {
-  name: string
-  email: string
-  isAdmin: boolean
 }

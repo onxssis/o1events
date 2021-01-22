@@ -85,6 +85,7 @@
                   placeholder="Location of the event"
                   type="text"
                   :options="{ fields: ['geometry', 'formatted_address'] }"
+                  :value="isEditing ? event.address : ''"
                   @place_changed="setAddress"
                   @keypress.enter="$event.preventDefault()"
                 >
@@ -132,7 +133,7 @@
               v-model="eventDto.description"
               label="Description"
               name="description"
-              rows="3"
+              rows="6"
               placeholder="Brief description for your event. URLs are hyperlinked."
             ></base-text-area>
 
@@ -141,7 +142,21 @@
                 <label class="block text-sm font-medium text-gray-700">
                   Cover
                 </label>
-                <div class="mt-2 flex items-center">
+
+                <!-- <div class="shadow border-2 border-white rounded w-40 h-auto">
+                  <img
+                    class="w-full h-full overflow-hidden object-cover rounded"
+                    src="https://dh-ui.s3.amazonaws.com/assets/photo-1564061170517-d3907caa96ea.jfif"
+                    alt="avatar"
+                  />
+                </div> -->
+
+                <div
+                  v-if="uploading"
+                  class="animate-spin mt-2 ease-linear rounded-full border-4 border-t-4 border-gray-200 h-8 w-8"
+                  style="border-top-color: #9818d6"
+                ></div>
+                <div v-else class="mt-2 flex items-center">
                   <div class="overflow-hidden relative w-full">
                     <label
                       type="button"
@@ -151,7 +166,6 @@
                       <input
                         class="absolute w-full block top-0 left-0 opacity-0 cursor-pointer"
                         type="file"
-                        name="vacancyImageFiles"
                         @change="uploadCover"
                       />
                     </label>
@@ -176,10 +190,11 @@
           </div>
           <div class="px-4 py-3 bg-gray-50 text-right sm:px-6 rounded-b-lg">
             <button
+              :disabled="uploading"
               type="submit"
               class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-primary hover:bg-primary-dark focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-primary"
             >
-              Save
+              {{ event ? 'Update' : 'Save' }}
             </button>
           </div>
         </div>
@@ -189,13 +204,13 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, namespace } from 'nuxt-property-decorator'
+import { Vue, Component, namespace, Prop } from 'nuxt-property-decorator'
 import VueCtkDateTimePicker from 'vue-ctk-date-time-picker'
 import { Fragment } from 'vue-fragment'
 import MultiSelect from 'vue-multiselect'
 import ErrorAlert from '../ui/error-alert.vue'
-import { ICategory, IEventDto } from '~/@types'
-import { deleteObjectProps } from '~/utils'
+import { ICategory, IEvent, IEventDto } from '~/@types'
+import { deleteObjectProps, mergeObjects } from '~/utils'
 
 const categoryStore = namespace('categories')
 const initialFormState = {
@@ -218,11 +233,20 @@ const initialFormState = {
   components: { VueCtkDateTimePicker, MultiSelect, Fragment, ErrorAlert },
 })
 export default class EventForm extends Vue {
+  @Prop({ type: Object, default: undefined }) event?: IEvent
+
   @categoryStore.State('categories')
   selectOptions!: ICategory[]
 
   eventDto: IEventDto = initialFormState
+
   errors: string[] = []
+
+  uploading = false
+
+  get isEditing() {
+    return typeof this.event !== 'undefined'
+  }
 
   get minEndDate() {
     return new Date(this.eventDto.startDate || Date.now()).toISOString()
@@ -238,25 +262,37 @@ export default class EventForm extends Vue {
     this.eventDto.lat = place.geometry.location.lat()
   }
 
-  async uploadCover(e) {
+  async uploadCover(e: any) {
+    this.uploading = true
+
     const files = e.target.files
     const form = new FormData()
     form.append('file', files[0])
     form.append('upload_preset', 'sickfits')
 
-    const { data } = await this.$axios.post(
+    const response = await fetch(
       'https://api.cloudinary.com/v1_1/onxssis/image/upload',
-      form
+      {
+        method: 'POST',
+        body: form,
+      }
     )
 
-    console.log(data)
+    const file = await response.json()
+
+    console.log(file)
+
+    this.uploading = false
   }
 
   async submitForm() {
     try {
       this.filterForm()
 
-      await this.$axios.post('/events', this.eventDto)
+      const method = this.isEditing ? 'put' : 'post'
+      const url = this.isEditing ? `/events/${this.event?.id}` : '/events'
+
+      await this.$axios[method](url, this.eventDto)
       this.resetForm()
     } catch (error) {
       if (error.response) {
@@ -275,6 +311,16 @@ export default class EventForm extends Vue {
     } else {
       deleteObjectProps(this.eventDto, ['link'])
     }
+
+    this.eventDto.categories = this.eventDto.categories.map(
+      (category) => category.id
+    )
+  }
+
+  mounted() {
+    this.eventDto =
+      (mergeObjects(initialFormState, this.event) as IEventDto) ||
+      initialFormState
   }
 
   resetForm() {

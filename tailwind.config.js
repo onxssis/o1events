@@ -15,6 +15,7 @@ module.exports = {
           dark: '#6a1196',
           DEFAULT: '#9818d6',
           light: '#cc8ceb',
+          lighter: '#ebe6ff',
           lightest: '#f8f6ff',
         },
         carrot: {
@@ -30,6 +31,7 @@ module.exports = {
           dark: '#6a1196',
           DEFAULT: '#9818d6',
           light: '#cc8ceb',
+          lighter: '#ebe6ff',
           lightest: '#f8f6ff',
         },
       },
@@ -39,8 +41,9 @@ module.exports = {
       },
       maxWidth: {
         container: '1200px',
-        mini: '1024px',
+        small: '1024px',
         fit: 'fit-content',
+        mini: '960px',
       },
       spacing: {
         84: '21rem',

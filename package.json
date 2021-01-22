@@ -22,6 +22,7 @@
     "vue-ctk-date-time-picker": "^2.5.0",
     "vue-fragment": "^1.5.1",
     "vue-multiselect": "^2.1.6",
+    "vue-toast-notification": "^0.6.0",
     "vue2-google-maps": "^0.10.7"
   },
   "devDependencies": {

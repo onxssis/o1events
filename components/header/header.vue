@@ -158,13 +158,13 @@ export default class Header extends Vue {
   }
 
   mounted() {
-    document.addEventListener('click', (event) => {
-      event.stopPropagation()
-      const ref = this.$refs.clickAway
-      if (ref && !(ref as Element).contains(event.target as Node)) {
-        this.open = false
-      }
-    })
+    // document.addEventListener('click', (event) => {
+    //   event.stopPropagation()
+    //   const ref = this.$refs.clickAway
+    //   if (ref && !(ref as Element).contains(event.target as Node)) {
+    //     this.open = false
+    //   }
+    // })
   }
 }
 </script>
