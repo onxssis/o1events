@@ -9,6 +9,7 @@ import {
   IsArray,
   IsEnum,
   IsNotEmpty,
+  IsUrl,
 } from 'class-validator';
 import { EventType } from '../entities/event.entity';
 
@@ -26,11 +27,17 @@ export class CreateEventDto {
   @IsNotEmpty({ message: 'location should not be empty' })
   readonly address?: string;
 
+  @IsOptional()
   @IsLatitude()
-  readonly lat: string;
+  readonly lat?: string;
 
+  @IsOptional()
   @IsLongitude()
-  readonly lng: string;
+  readonly lng?: string;
+
+  @IsOptional()
+  @IsUrl()
+  readonly link?: string;
 
   @IsOptional()
   @IsNumber()
