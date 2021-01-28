@@ -2,7 +2,10 @@ import {
   Connection,
   EntityRepository,
   LessThan,
+  LessThanOrEqual,
   MoreThanOrEqual,
+  Raw,
+  SelectQueryBuilder,
 } from 'typeorm';
 import { Event } from '@/events/entities/event.entity';
 import { IEventRepository } from '../event.repository';
@@ -13,6 +16,7 @@ import {
   PaginationQueryDto,
 } from '@/common/dto/pagination.dto';
 import { Category } from '@/categories/entities/category.entity';
+import { FilterQueryDto } from '@/common/dto/filter.dto';
 
 @EntityRepository(Event)
 export class EventRepository implements IEventRepository {
@@ -25,19 +29,34 @@ export class EventRepository implements IEventRepository {
   async findAll(
     paginationDto: PaginationQueryDto,
   ): Promise<PaginatedResultDto> {
-    const { limit, page } = paginationDto;
+    const {
+      limit,
+      page,
+      q,
+      type,
+      startDate,
+      endDate,
+      category,
+    } = paginationDto;
     const skip = (page - 1) * limit;
+    const where = this.whereClauses({ q, type, startDate, endDate, category });
 
     // const [data, totalCount] = await this.repo
     //   .createQueryBuilder('event')
-    //   .addSelect(`CASE WHEN event.type='person' THEN 1 END`, 'isOnline')
+    //   // .addSelect(`CASE WHEN event.type='person' THEN 1 END`, 'isOnline')
     //   .leftJoinAndSelect('event.categories', 'category')
-    //   .loadRelationCountAndMap('event.reservationsCount', 'event.reservations')
+    //   .leftJoinAndSelect('event.reservations', 'reservation')
+    //   .leftJoinAndSelect('reservation.user', 'reservation_user')
+    //   // .loadRelationCountAndMap('event.reservationsCount', 'event.reservations')
     //   .skip(skip)
+    //   [where]()
     //   .take(limit)
     //   .getManyAndCount();
 
     const [data, totalCount] = await this.repo.findAndCount({
+      relations: ['categories'],
+      join: { alias: 'event', leftJoin: { categories: 'event.categories' } },
+      where,
       skip,
       take: limit,
     });
@@ -66,11 +85,11 @@ export class EventRepository implements IEventRepository {
   }
 
   async findOne(id: number) {
-    return this.repo.findOneOrFail(id);
+    return this.repo.findOneOrFail(id, { relations: ['categories'] });
   }
 
   async findOneBySlug(slug: string) {
-    return this.repo.findOneOrFail({ slug });
+    return this.repo.findOneOrFail({ slug }, { relations: ['categories'] });
   }
 
   async create(createEventDto: CreateEventDto, categories: Category[]) {
@@ -82,7 +101,7 @@ export class EventRepository implements IEventRepository {
   async update(id: number, updateEventDto: UpdateEventDto) {
     const event = await this.repo.preload({ id, ...updateEventDto });
 
-    event.categories = event.categories.filter((category) =>
+    event.categories = event.categories?.filter((category) =>
       updateEventDto.categories.includes(category.id),
     );
 
@@ -91,5 +110,83 @@ export class EventRepository implements IEventRepository {
 
   async delete(id: number) {
     return this.repo.delete(id);
+  }
+
+  private whereClauses(filters: FilterQueryDto) {
+    const { q, type, startDate, endDate, category } = filters;
+    let whereClause = {};
+
+    if (type) {
+      whereClause = { ...whereClause, type };
+    }
+
+    if (startDate && endDate) {
+      whereClause = {
+        ...whereClause,
+        startDate: MoreThanOrEqual(startDate),
+        endDate: LessThanOrEqual(endDate),
+      };
+    }
+
+    if (q) {
+      whereClause = {
+        title: Raw(
+          (alias) => `${alias} ILIKE :q OR event.description ILIKE :q`,
+          {
+            q: `%${q}%`,
+          },
+        ),
+        ...whereClause,
+      };
+    }
+
+    if (category) {
+      const currentWhereClause = whereClause;
+      whereClause = (qb: SelectQueryBuilder<Event>) => {
+        qb.where({ ...currentWhereClause }).andWhere(
+          'categories.name = :category',
+          {
+            category,
+          },
+        );
+      };
+    }
+
+    // if (dateRange) {
+    //   switch (dateRange) {
+    //     case 'now':
+    //       where = {
+    //         ...where,
+    //         startDate: LessThan(new Date(Date.now()).toISOString()),
+    //         endDate: MoreThan(new Date(Date.now()).toISOString()),
+    //       };
+    //       break;
+
+    //     case 'today':
+    //       where = {
+    //         ...where,
+    //         startDate: Raw(
+    //           (alias) =>
+    //             `TO_CHAR(${alias}, 'YYYY-MM-DD') = TO_CHAR(CURRENT_DATE, 'YYYY-MM-DD')`,
+    //         ),
+    //       };
+    //       break;
+
+    //     case 'tomorrow':
+    //       where = {
+    //         ...where,
+    //         startDate: Raw(
+    //           (alias) =>
+    //             `TO_CHAR(${alias}, 'YYYY-MM-DD') = TO_CHAR(CURRENT_DATE + INTERVAL '1' DAY, 'YYYY-MM-DD')`,
+    //         ),
+    //       };
+    //       break;
+
+    //     default:
+    //       break;
+    //   }
+    // }
+
+    return whereClause;
   }
 }

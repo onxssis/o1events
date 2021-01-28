@@ -64,7 +64,37 @@ describe('EventRepository', () => {
       totalCount: 0,
       hasMorePages: false,
     };
-    const events = await eventRepository.findAll({ limit: 1, page: 1 });
+
+    const paginationAndFilterQuery = {
+      limit: 1,
+      page: 1,
+      q: 'tech',
+      type: 'online',
+      startDate: new Date() + '',
+      endDate: new Date() + '',
+      dateRange: new Date() + '',
+    };
+
+    const events = await eventRepository.findAll(paginationAndFilterQuery);
+
+    expect(events).toMatchObject(result);
+  });
+
+  it('should call the findAll method without params', async () => {
+    const result = {
+      data: [],
+      page: 1,
+      perPage: 1,
+      totalCount: 0,
+      hasMorePages: false,
+    };
+
+    const paginationAndFilterQuery = {
+      limit: 1,
+      page: 1,
+    };
+
+    const events = await eventRepository.findAll(paginationAndFilterQuery);
 
     expect(events).toMatchObject(result);
   });
@@ -106,6 +136,29 @@ describe('EventRepository', () => {
     const event = await eventRepository.delete(1);
 
     expect(event).toBeNull();
+  });
+
+  it('should call the whereClauses method', async () => {
+    const filterQuery = {
+      q: 'tech',
+      type: 'online',
+    };
+
+    const whereClause = eventRepository['whereClauses'](filterQuery);
+
+    expect(typeof whereClause).toBe('object');
+  });
+
+  it('should call the whereClauses method again', async () => {
+    const filterQuery = {
+      q: 'tech',
+      type: 'online',
+      category: 'meet up',
+    };
+
+    const whereClause = eventRepository['whereClauses'](filterQuery);
+
+    expect(typeof whereClause).toBe('function');
   });
 
   it('should call the repo getter method', async () => {

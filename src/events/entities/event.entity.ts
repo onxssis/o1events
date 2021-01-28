@@ -67,7 +67,7 @@ export class Event extends CoreEntity {
   @Column({ nullable: true })
   link?: string;
 
-  @ManyToMany(() => Category, { eager: true, onDelete: 'CASCADE' })
+  @ManyToMany(() => Category, { onDelete: 'CASCADE' })
   @JoinTable()
   categories: Category[];
 

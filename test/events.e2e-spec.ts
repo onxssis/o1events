@@ -5,8 +5,9 @@ import { factory, FactoryModule } from '@/factory';
 
 import { AppModule } from './../src/app.module';
 import * as utils from './utils';
-import { Event } from '@/events/entities/event.entity';
+import { Event, EventType } from '@/events/entities/event.entity';
 import { User } from '@/users/entities/user.entity';
+import { Category } from '@/categories/entities/category.entity';
 
 describe('EventsController (e2e)', () => {
   let app: INestApplication;
@@ -49,6 +50,71 @@ describe('EventsController (e2e)', () => {
 
       expect(response.body.data).toHaveLength(1);
       expect(response.body.hasMorePages).toBe(true);
+    });
+
+    it('should return a list of events filtered by search query q', async () => {
+      await factory(Event).createMany(2);
+      await factory(Event).create({ title: 'Node Dev Summit' });
+
+      const response = await request(app.getHttpServer())
+        .get('/events?q=node')
+        .expect(200);
+
+      const event = response.body.data[0];
+      expect(response.body.data).toHaveLength(1);
+      expect(event.title).toBe('Node Dev Summit');
+      expect(response.body.hasMorePages).toBe(false);
+    });
+
+    it('should return a list of events filtered by type', async () => {
+      await factory(Event).createMany(2);
+      await factory(Event).create({ type: EventType.ONLINE });
+
+      const response = await request(app.getHttpServer())
+        .get('/events?type=online')
+        .expect(200);
+
+      const event = response.body.data[0];
+      expect(response.body.data).toHaveLength(1);
+      expect(event.type).toBe(EventType.ONLINE);
+      expect(response.body.hasMorePages).toBe(false);
+    });
+
+    it('should return a list of events filtered by startDate & endDate', async () => {
+      const startDate = new Date();
+      const endDate = new Date(startDate.getTime() + 60 * 60000);
+      await factory(Event).createMany(2);
+      await factory(Event).create({ startDate, endDate, title: 'Test Event' });
+
+      const response = await request(app.getHttpServer())
+        .get(
+          `/events?startDate=${startDate.toISOString()}&endDate=${endDate.toISOString()}`,
+        )
+        .expect(200);
+
+      const event = response.body.data[0];
+      expect(response.body.data).toHaveLength(1);
+      expect(event.title).toBe('Test Event');
+      expect(response.body.hasMorePages).toBe(false);
+    });
+
+    it('should return a list of events filtered by category', async () => {
+      await factory(Category).createMany(2);
+      const category = await factory(Category).create({ name: 'tech' });
+      await factory(Event).createMany(2);
+      await factory(Event).create({
+        categories: [category],
+        title: 'tech event',
+      });
+
+      const response = await request(app.getHttpServer())
+        .get(`/events?category=tech`)
+        .expect(200);
+
+      const event = response.body.data[0];
+      expect(response.body.data).toHaveLength(1);
+      expect(event.title).toBe('tech event');
+      expect(response.body.hasMorePages).toBe(false);
     });
 
     it('should not allow unauthenticated user create event', async () => {
