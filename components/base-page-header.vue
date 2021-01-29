@@ -7,5 +7,8 @@
         <slot />
       </h2>
     </div>
+    <div class="self-end">
+      <slot name="right" />
+    </div>
   </div>
 </template>

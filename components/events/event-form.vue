@@ -8,7 +8,7 @@
             <div class="grid grid-cols-3 md:gap-6">
               <div class="col-span-3 md:col-span-2">
                 <base-input
-                  v-model="eventDto.title"
+                  v-model="dto.title"
                   label="Title"
                   name="title"
                   placeholder="Title of the event"
@@ -23,7 +23,7 @@
                 <div class="border border-gray-300 rounded-lg flex relative">
                   <select
                     id="type"
-                    v-model="eventDto.type"
+                    v-model="dto.type"
                     name="type"
                     required
                     class="bg-transparent appearance-none pl-3 py-2 w-full text-sm sm:text-base border border-transparent focus:outline-none focus:border-primary text-gray-800 rounded"
@@ -43,7 +43,7 @@
                 >
                 <VueCtkDateTimePicker
                   id="startDatePicker"
-                  v-model="eventDto.startDate"
+                  v-model="dto.startDate"
                   color="#9818d6"
                   :no-label="true"
                   output-format="YYYY-MM-DDTHH:mm:ss.sssZ"
@@ -60,7 +60,7 @@
 
                 <VueCtkDateTimePicker
                   id="endDatePicker"
-                  v-model="eventDto.endDate"
+                  v-model="dto.endDate"
                   color="#9818d6"
                   :no-label="true"
                   output-format="YYYY-MM-DDTHH:mm:ss.sssZ"
@@ -85,7 +85,7 @@
                   placeholder="Location of the event"
                   type="text"
                   :options="{ fields: ['geometry', 'formatted_address'] }"
-                  :value="isEditing ? event.address : ''"
+                  :value="dto.address"
                   @place_changed="setAddress"
                   @keypress.enter="$event.preventDefault()"
                 >
@@ -94,7 +94,7 @@
 
               <div v-if="isOnline" class="col-span-3">
                 <base-input
-                  v-model="eventDto.link"
+                  v-model="dto.link"
                   label="Link"
                   name="link"
                   placeholder="Link to join event"
@@ -105,7 +105,7 @@
 
               <div v-if="!isOnline" class="col-span-1">
                 <base-input
-                  v-model.number="eventDto.price"
+                  v-model.number="dto.price"
                   type="number"
                   label="Price"
                   help="0 = free"
@@ -118,7 +118,7 @@
 
               <div class="col-span-1">
                 <base-input
-                  v-model.number="eventDto.availableSlots"
+                  v-model.number="dto.availableSlots"
                   label="Slots"
                   placeholder="Available seats"
                   required
@@ -130,7 +130,7 @@
 
             <base-text-area
               id="description"
-              v-model="eventDto.description"
+              v-model="dto.description"
               label="Description"
               name="description"
               rows="6"
@@ -178,7 +178,7 @@
                   Categories/Tags
                 </label>
                 <multi-select
-                  v-model="eventDto.categories"
+                  v-model="dto.categories"
                   :multiple="true"
                   label="name"
                   track-by="id"
@@ -204,11 +204,12 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, namespace, Prop } from 'nuxt-property-decorator'
+import { Component, namespace, Prop, mixins } from 'nuxt-property-decorator'
 import VueCtkDateTimePicker from 'vue-ctk-date-time-picker'
 import { Fragment } from 'vue-fragment'
 import MultiSelect from 'vue-multiselect'
 import ErrorAlert from '../ui/error-alert.vue'
+import ResourceFormMixin from '~/components/mixins/ResourceFormMixin'
 import { ICategory, IEvent, IEventDto } from '~/@types'
 import { deleteObjectProps, mergeObjects } from '~/utils'
 
@@ -232,57 +233,31 @@ const initialFormState = {
 @Component({
   components: { VueCtkDateTimePicker, MultiSelect, Fragment, ErrorAlert },
 })
-export default class EventForm extends Vue {
+export default class EventForm extends mixins(ResourceFormMixin) {
   @Prop({ type: Object, default: undefined }) event?: IEvent
 
   @categoryStore.State('categories')
   selectOptions!: ICategory[]
 
-  eventDto: IEventDto = initialFormState
-
-  errors: string[] = []
-
-  uploading = false
+  dto: IEventDto = initialFormState
+  uploadPreset = 'eventbux_events'
 
   get isEditing() {
     return typeof this.event !== 'undefined'
   }
 
   get minEndDate() {
-    return new Date(this.eventDto.startDate || Date.now()).toISOString()
+    return new Date(this.dto.startDate || Date.now()).toISOString()
   }
 
   get isOnline() {
-    return this.eventDto.type === 'online'
+    return this.dto.type === 'online'
   }
 
   setAddress(place: any) {
-    this.eventDto.address = place.formatted_address
-    this.eventDto.lng = place.geometry.location.lng()
-    this.eventDto.lat = place.geometry.location.lat()
-  }
-
-  async uploadCover(e: any) {
-    this.uploading = true
-
-    const files = e.target.files
-    const form = new FormData()
-    form.append('file', files[0])
-    form.append('upload_preset', 'sickfits')
-
-    const response = await fetch(
-      'https://api.cloudinary.com/v1_1/onxssis/image/upload',
-      {
-        method: 'POST',
-        body: form,
-      }
-    )
-
-    const file = await response.json()
-
-    console.log(file)
-
-    this.uploading = false
+    this.dto.address = place.formatted_address
+    this.dto.lng = place.geometry.location.lng()
+    this.dto.lat = place.geometry.location.lat()
   }
 
   async submitForm() {
@@ -291,52 +266,50 @@ export default class EventForm extends Vue {
 
       const method = this.isEditing ? 'put' : 'post'
       const url = this.isEditing ? `/events/${this.event?.id}` : '/events'
+      const message = this.isEditing ? 'updated' : 'created'
 
-      await this.$axios[method](url, this.eventDto)
-      this.resetForm()
-    } catch (error) {
-      if (error.response) {
-        const message = error.response.data.message
+      await this.$axios[method](url, this.dto)
 
-        this.errors = Array.isArray(message) ? message : [message]
-      } else {
-        this.errors = ['An unexpected error occured. Please try again!']
+      if (!this.isEditing) {
+        this.resetForm()
       }
+
+      this.$toast.success(`Event ${message} successfully`)
+    } catch (error) {
+      this.onSubmitError(error)
     }
   }
 
   filterForm() {
     if (this.isOnline) {
-      deleteObjectProps(this.eventDto, ['address', 'lat', 'lng'])
+      deleteObjectProps(this.dto, ['address', 'lat', 'lng'])
     } else {
-      deleteObjectProps(this.eventDto, ['link'])
+      deleteObjectProps(this.dto, ['link'])
     }
 
-    this.eventDto.categories = this.eventDto.categories.map(
-      (category) => category.id
-    )
+    this.dto.categories = this.dto.categories.map((category) => category.id)
   }
 
   mounted() {
-    this.eventDto =
+    this.dto =
       (mergeObjects(initialFormState, this.event) as IEventDto) ||
       initialFormState
   }
 
   resetForm() {
-    this.eventDto.title = ''
-    this.eventDto.description = ''
-    this.eventDto.startDate = ''
-    this.eventDto.endDate = ''
-    this.eventDto.address = ''
-    this.eventDto.link = ''
-    this.eventDto.lng = 0
-    this.eventDto.lat = 0
-    this.eventDto.availableSlots = 1
-    this.eventDto.type = ''
-    this.eventDto.price = 0
-    this.eventDto.categories = []
-    this.eventDto.cover = null
+    this.dto.title = ''
+    this.dto.description = ''
+    this.dto.startDate = ''
+    this.dto.endDate = ''
+    this.dto.address = ''
+    this.dto.link = ''
+    this.dto.lng = 0
+    this.dto.lat = 0
+    this.dto.availableSlots = 1
+    this.dto.type = ''
+    this.dto.price = 0
+    this.dto.categories = []
+    this.dto.cover = null
   }
 }
 </script>

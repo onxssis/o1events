@@ -13,6 +13,7 @@ export interface IUser extends BaseModel {
   name: string
   email: string
   isAdmin: boolean
+  avatar: string
 }
 
 export interface IEvent extends BaseModel {
@@ -57,4 +58,10 @@ export interface ICategory extends BaseModel {
   name: string
   slug: string
   description: string | null
+}
+
+export interface ICategoryDto {
+  name: string
+  description?: string
+  cover?: string
 }

@@ -1,7 +1,14 @@
 <template>
   <div class="bg-gray-50 wrapper py-8">
     <div class="max-w-fit md:max-w-screen-sm lg:max-w-screen-md mx-auto">
-      <base-page-header> Create event </base-page-header>
+      <base-page-header>
+        Create event
+        <template v-slot:right>
+          <NuxtLink to="/categories/create" class="text-royal underline">
+            Create category</NuxtLink
+          >
+        </template>
+      </base-page-header>
 
       <event-form />
     </div>

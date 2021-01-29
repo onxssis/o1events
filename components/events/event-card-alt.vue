@@ -5,13 +5,14 @@
   >
     <div class="head px-3 bg-white flex items-center justify-between">
       <div
+        v-if="isOnlineEvent"
         class="border border-gray-500 flex items-center bg-white text-xs p-1 py-px rounded-md"
       >
         <dot />
         <span class="pr-1 pl-1">online event</span>
       </div>
 
-      <span class="font-medium">${{ data.price }}</span>
+      <span class="font-medium ml-auto">${{ data.price }}</span>
     </div>
     <div class="mid px-3 pt-6">
       <p class="uppercase text-sm mb-2 text-yellow-700">
@@ -86,6 +87,14 @@ export default class EventCardAlt extends Vue {
 
   get formattedStartDate() {
     return formatDate(this.data.startDate)
+  }
+
+  get isOnlineEvent() {
+    return this.data.type === 'online'
+  }
+
+  get isFree() {
+    return this.data.price === 0
   }
 }
 </script>
