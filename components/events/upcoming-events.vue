@@ -17,9 +17,12 @@ export default class UpcomingEvents extends Vue {
   events = []
 
   async fetch() {
-    const { data } = await this.$axios.get('/events/upcoming')
-
-    this.events = data
+    try {
+      const { data } = await this.$axios.get('/events/upcoming')
+      this.events = data
+    } catch (e) {
+      this.events = []
+    }
   }
 }
 </script>

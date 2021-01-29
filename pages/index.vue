@@ -1,7 +1,9 @@
 <template>
   <div>
     <hero />
-    <base-search />
+    <div class="px-4 mt-4">
+      <base-search />
+    </div>
     <upcoming-events />
   </div>
 </template>

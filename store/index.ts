@@ -12,7 +12,11 @@ export const actions: ActionTree<RootState, RootState> = {
   },
 
   async fetchCategories({ dispatch }) {
-    const { data } = await this.$axios.get('/categories')
-    await dispatch('categories/index', data)
+    try {
+      const { data } = await this.$axios.get('/categories')
+      await dispatch('categories/index', data)
+    } catch (e) {
+      await dispatch('categories/index', [])
+    }
   },
 }
