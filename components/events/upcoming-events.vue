@@ -2,8 +2,7 @@
   <base-section
     v-slot="slotProps"
     heading="Upcoming Events"
-    :loading="$fetchState.pending"
-    :data="events"
+    data-url="/events/upcoming"
   >
     <event-card-alt :data="slotProps.data" />
   </base-section>

@@ -17,6 +17,7 @@
             label="Name"
             placeholder="Full Name"
             required="true"
+            class="mb-4"
           >
             <template v-slot:icon>
               <svg
@@ -42,6 +43,7 @@
             placeholder="Email Address"
             type="email"
             required="true"
+            class="mb-4"
           >
             <template v-slot:icon>
               <svg
@@ -67,6 +69,7 @@
             type="password"
             name="password"
             required="true"
+            class="mb-6"
           >
             <template v-slot:icon>
               <svg
@@ -124,9 +127,9 @@ import { Vue, Component, Prop } from 'nuxt-property-decorator'
 import { Fragment } from 'vue-fragment'
 import ErrorAlert from '../ui/error-alert.vue'
 
-enum AuthScreenType {
-  login = 'login',
-  register = 'register',
+const AuthScreenType = {
+  login: 'login',
+  register: 'register',
 }
 
 @Component({

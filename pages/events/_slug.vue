@@ -52,7 +52,7 @@
       class="grid grid-cols-1 lg:grid-cols-12 lg:max-w-mini xl:max-w-container mx-auto mt-6 lg:mt-8 xl:mt-18 pb-14"
     >
       <div class="col-span-7 mr-8">
-        <h3 class="text-2xl font-display font-semibold mb-4">Description</h3>
+        <h3 class="text-2xl font-display font-semibold mb-4">Details</h3>
 
         <div class="text-base text-gray-700">
           {{ event.description }}
@@ -85,13 +85,17 @@
         <div v-if="event.categories.length">
           <h3 class="text-2xl font-display font-semibold mb-6 mt-12">Tags</h3>
 
-          <a v-for="category in event.categories" :key="category.id" href="#">
+          <NuxtLink
+            v-for="category in event.categories"
+            :key="category.id"
+            :to="`/events/find?category=${category.name}`"
+          >
             <span
               class="inline-flex items-center px-5 py-2 rounded-md text-sm font-medium bg-gray-100 text-gray-800"
             >
               {{ category.name }}
             </span>
-          </a>
+          </NuxtLink>
         </div>
       </div>
     </div>
@@ -120,7 +124,7 @@ export default class EventPage extends Vue {
   event!: IEvent
 
   get formattedDate() {
-    return formatDate(this.event.startDate)
+    return formatDate(this.event.startDate, 'eee, MMM dd yyyy, ppp')
   }
 
   get formattedEndDate() {

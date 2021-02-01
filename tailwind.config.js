@@ -10,6 +10,8 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        'black-transparent': 'rgba(0, 0, 0, 0.01)',
+        'black-30': 'rgba(0, 0, 0, 0.03)',
         royal: {
           darkest: '#3d0a56',
           dark: '#6a1196',

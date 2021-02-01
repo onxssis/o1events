@@ -78,23 +78,23 @@ export default class EventCardAlt extends Vue {
   @Prop({ required: true }) readonly data!: IEvent
 
   get hasReservations() {
-    return this.data.reservations.length > 0
+    return this.data.reservations?.length > 0
   }
 
   get reservations() {
-    return this.data.reservations.slice(0, 3)
+    return this.data.reservations?.slice(0, 3)
   }
 
   get formattedStartDate() {
-    return formatDate(this.data.startDate)
+    return formatDate(this.data?.startDate)
   }
 
   get isOnlineEvent() {
-    return this.data.type === 'online'
+    return this.data?.type === 'online'
   }
 
   get isFree() {
-    return this.data.price === 0
+    return this.data?.price === 0
   }
 }
 </script>

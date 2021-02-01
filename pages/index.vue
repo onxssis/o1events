@@ -1,10 +1,11 @@
 <template>
   <div>
     <hero />
-    <div class="px-4 mt-4">
+    <div class="px-4 mb-20 mt-24">
       <base-search />
     </div>
     <upcoming-events />
+    <category-events />
   </div>
 </template>
 

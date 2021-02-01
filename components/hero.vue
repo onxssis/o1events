@@ -9,13 +9,15 @@
           <span class="block md:inline-block">events near you</span>
         </h1>
 
-        <!-- <a
+        <!-- <base-search /> -->
+
+        <a
           class="bg-royal inline-block mt-2 mb-4 text-white font-display text-base px-8 py-3 rounded-md hover:bg-royal-dark outline-none focus:outline-none focus:bg-royal-dark"
           type="button"
           style="transition: all 0.15s ease"
         >
           Get Started
-        </a> -->
+        </a>
       </div>
 
       <div class="hero-image mt-6 md:hidden lg:block xl:max-w-xl">

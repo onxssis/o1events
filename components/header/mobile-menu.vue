@@ -5,8 +5,8 @@
       class="pt-4 pb-3 border-t border-gray-200"
     >
       <div class="mt-3">
-        <mobile-menu-link>Log in</mobile-menu-link>
-        <mobile-menu-link>Sign up</mobile-menu-link>
+        <mobile-menu-link to="/login">Log in</mobile-menu-link>
+        <mobile-menu-link to="/register">Sign up</mobile-menu-link>
       </div>
     </div>
     <div v-else class="pt-4 pb-3 border-t border-gray-200">
@@ -28,9 +28,9 @@
         </div>
       </div>
       <div class="mt-3">
-        <mobile-menu-link>Profile</mobile-menu-link>
-        <mobile-menu-link>Settings</mobile-menu-link>
-        <mobile-menu-link>Sign out</mobile-menu-link>
+        <mobile-menu-link to="/">Profile</mobile-menu-link>
+        <mobile-menu-link to="/">Settings</mobile-menu-link>
+        <mobile-menu-link to="/">Sign out</mobile-menu-link>
       </div>
     </div>
   </div>

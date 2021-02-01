@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col items-center justify-center bg-gray-50 wrapper">
+  <div class="flex flex-col items-center justify-center bg-gray-100 wrapper">
     <auth-screen screen="login" />
   </div>
 </template>
