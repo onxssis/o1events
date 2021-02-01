@@ -19,6 +19,7 @@
     "date-fns": "^2.16.1",
     "nuxt": "^2.14.6",
     "nuxt-property-decorator": "^2.8.8",
+    "vue-content-placeholders": "^0.2.1",
     "vue-ctk-date-time-picker": "^2.5.0",
     "vue-fragment": "^1.5.1",
     "vue-multiselect": "^2.1.6",
