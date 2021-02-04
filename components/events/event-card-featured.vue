@@ -2,7 +2,7 @@
   <div
     class="py-4 px-3 md:px-6 bg-black-transparent border border-black-30 border-l-0 border-r-0 md:border-l md:border-r md:rounded-xl"
   >
-    <NuxtLink to="/">
+    <NuxtLink :to="`/events/${event.slug}`">
       <div class="flex items-center">
         <div class="left pr-4 rounded-lg hidden md:block">
           <div class="relative">
@@ -45,7 +45,7 @@ import { formatDate } from '~/utils'
 
 @Component({
   filters: {
-    pluralize: (word, amount) =>
+    pluralize: (word: string, amount: number) =>
       amount > 1 || amount === 0 ? `${word}s` : word,
   },
 })
@@ -65,11 +65,11 @@ export default class EventCardFeatured extends Vue {
   }
 
   get isOnlineEvent() {
-    return this.data?.type === 'online'
+    return this.event?.type === 'online'
   }
 
   get isFree() {
-    return this.data?.price === 0
+    return this.event?.price === 0
   }
 }
 </script>

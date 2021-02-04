@@ -52,6 +52,16 @@ export default {
 
   loading: { color: '#9818d6', throttle: 0 },
 
+  router: {
+    extendRoutes(routes) {
+      routes.push({
+        name: 'events-find-category',
+        path: '/events/find/:category',
+        component: '~/pages/events/find.vue',
+      })
+    },
+  },
+
   auth: {
     redirect: {
       home: '/',

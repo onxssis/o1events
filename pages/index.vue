@@ -6,6 +6,7 @@
     </div>
     <upcoming-events />
     <category-events />
+    <browse-category />
   </div>
 </template>
 

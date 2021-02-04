@@ -5,7 +5,7 @@
       :key="category.id"
       v-slot="slotProps"
       :heading="`${category.name}`"
-      :data-url="`/events?category=${category.name}&limit=5`"
+      :data-url="`/events?category=${category.slug}&limit=5`"
     >
       <event-card-alt :data="slotProps.data" />
     </base-section>

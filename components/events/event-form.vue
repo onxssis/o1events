@@ -262,13 +262,13 @@ export default class EventForm extends mixins(ResourceFormMixin) {
 
   async submitForm() {
     try {
-      this.filterForm()
+      const form = this.filterForm()
 
       const method = this.isEditing ? 'put' : 'post'
       const url = this.isEditing ? `/events/${this.event?.id}` : '/events'
       const message = this.isEditing ? 'updated' : 'created'
 
-      await this.$axios[method](url, this.dto)
+      await this.$axios[method](url, form)
 
       if (!this.isEditing) {
         this.resetForm()
@@ -287,7 +287,9 @@ export default class EventForm extends mixins(ResourceFormMixin) {
       deleteObjectProps(this.dto, ['link'])
     }
 
-    this.dto.categories = this.dto.categories.map((category) => category.id)
+    const categories = this.dto.categories.map((category) => category.id)
+
+    return { ...this.dto, categories }
   }
 
   mounted() {

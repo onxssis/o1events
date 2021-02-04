@@ -1,5 +1,9 @@
 <template>
-  <div class="max-w-screen-xl mx-auto my-4 px-4" v-bind="$attrs">
+  <div
+    v-if="results.length > 0"
+    class="max-w-screen-xl mx-auto my-4 px-4"
+    v-bind="$attrs"
+  >
     <div class="flex justify-center md:justify-between items-center mb-6">
       <h2 class="font-semibold text-2xl xl:text-3xl pl-3">{{ heading }}</h2>
       <NuxtLink
