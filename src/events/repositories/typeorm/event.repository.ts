@@ -61,12 +61,15 @@ export class EventRepository implements IEventRepository {
       take: limit,
     });
 
+    const lastPage = Math.max(Math.ceil(totalCount / limit));
+
     return {
       totalCount,
       page,
+      lastPage,
       perPage: limit,
       data,
-      hasMorePages: totalCount > limit,
+      hasMorePages: page < lastPage,
     };
   }
 
@@ -99,11 +102,19 @@ export class EventRepository implements IEventRepository {
   }
 
   async update(id: number, updateEventDto: UpdateEventDto) {
-    const event = await this.repo.preload({ id, ...updateEventDto });
+    const { categories, ...rest } = updateEventDto;
+    let event = await this.findOne(id);
 
-    event.categories = event.categories?.filter((category) =>
-      updateEventDto.categories.includes(category.id),
-    );
+    event.categories =
+      event.categories?.filter((category) =>
+        updateEventDto.categories.includes(category.id),
+      ) || [];
+
+    event = await this.repo.preload({
+      ...event,
+      ...rest,
+      categories: [...event.categories, ...categories],
+    });
 
     return this.repo.save(event);
   }
@@ -144,7 +155,7 @@ export class EventRepository implements IEventRepository {
       const currentWhereClause = whereClause;
       whereClause = (qb: SelectQueryBuilder<Event>) => {
         qb.where({ ...currentWhereClause }).andWhere(
-          'categories.name = :category',
+          'categories.slug = :category',
           {
             category,
           },

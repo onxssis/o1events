@@ -92,6 +92,7 @@ describe('EventsController', () => {
       perPage: 3,
       totalCount: 6,
       hasMorePages: false,
+      lastPage: 8,
     };
 
     it('should return a list of events', async () => {

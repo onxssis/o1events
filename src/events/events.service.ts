@@ -42,9 +42,11 @@ export class EventsService {
   }
 
   async update(id: number, updateEventDto: UpdateEventDto) {
-    await this.findOne(id);
+    const categories = await this.categoryService.findByIds(
+      updateEventDto.categories,
+    );
 
-    return this.eventRepository.update(id, updateEventDto);
+    return this.eventRepository.update(id, { ...updateEventDto, categories });
   }
 
   remove(id: number) {

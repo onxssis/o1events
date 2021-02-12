@@ -45,14 +45,14 @@ export class Event extends CoreEntity {
   premium: boolean;
 
   @Column({
-    type: 'timestamp with time zone',
+    type: 'timestamp',
     name: 'start_date',
     default: 'NOW()',
   })
   startDate: Date;
 
   @Column({
-    type: 'timestamp with time zone',
+    type: 'timestamp',
     name: 'end_date',
     default: 'NOW()',
   })

@@ -12,6 +12,7 @@ export class PaginationQueryDto extends FilterQueryDto {
 export class PaginatedResultDto<T = any> {
   data: T[];
   page: number;
+  lastPage: number;
   perPage: number;
   totalCount: number;
   hasMorePages: boolean;

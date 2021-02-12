@@ -137,7 +137,6 @@ describe('EventsService', () => {
 
     const event = await service.update(1, createEventArgs);
 
-    expect(eventRepository.findOne).toHaveBeenCalledTimes(1);
     expect(eventRepository.update).toHaveBeenCalledTimes(1);
     expect(event).toEqual(
       expect.objectContaining({ ...createEventArgs, title: 'update' }),
