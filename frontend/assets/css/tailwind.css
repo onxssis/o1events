@@ -1,0 +1,54 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import './graphik.css';
+@import './inter.css';
+
+@layer base {
+  body {
+    @apply min-h-screen;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: 'Graphik';
+  }
+
+  a.nuxt-link-active {
+    @apply font-medium;
+  }
+
+  a.nuxt-link-exact-active {
+    @apply text-primary;
+  }
+}
+
+@layer components {
+  .button {
+    @apply flex items-center justify-center focus:outline-none text-white text-sm sm:text-base bg-primary hover:bg-primary-dark rounded py-2 px-6 transition duration-150 ease-in;
+  }
+
+  .button.alt {
+    @apply border border-primary bg-transparent text-primary hover:border-transparent hover:bg-primary-dark hover:text-white;
+  }
+
+  button:disabled {
+    @apply opacity-50 cursor-not-allowed;
+  }
+}
+
+@media (min-width: 1024px) {
+  .bs-search .input-container .input-one {
+    flex-basis: 65%;
+  }
+}
+
+@media (min-width: 1280px) {
+  .bs-search .input-container {
+    flex-basis: 75%;
+  }
+}
