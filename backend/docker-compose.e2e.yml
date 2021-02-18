@@ -5,8 +5,7 @@ services:
     container_name: eventbostest
     build:
       context: .
-      dockerfile: Dockerfile.test
-      target: eventbostest # only build this part of the Dockerfile (see: '... As example' )
+      dockerfile: Dockerfile.dev
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules # 'hack' prevents node_modules/ in the container from being overridden
@@ -39,8 +38,7 @@ services:
       POSTGRES_PASSWORD: postgres
       PG_DATA: /var/lib/postgresql/data
     volumes:
-      # - ./seed.db.sql:/docker-entrypoint-initdb.d/db.sql <- run only once when the pgdata volume is first created (when run via docker-compose)
-      - pgdata:/var/lib/postgresql/data # or specify a local folder like ./docker-volumes/pgdata:/var/lib/postgresql/data
+      - pgdata:/var/lib/postgresql/data
 
 networks:
   testnet:

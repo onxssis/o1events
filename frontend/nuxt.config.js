@@ -34,7 +34,7 @@ export default {
   modules: ['@nuxtjs/axios', '@nuxtjs/auth-next'],
 
   axios: {
-    baseURL: 'http://localhost:3000', // Used as fallback if no runtime config is provided
+    baseURL: process.env.API_BASE_URL || 'http://localhost:3000', // Used as fallback if no runtime config is provided
   },
 
   publicRuntimeConfig: {

@@ -1,0 +1,66 @@
+version: "3"
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dev
+    command: "yarn start:dev"
+    networks:
+      - tenet
+    volumes:
+      - /usr/src/app/node_modules
+      - ./backend:/usr/src/app
+    depends_on:
+      - postgres
+    env_file:
+      - ./backend/.env
+    ports:
+      - "6000:3000"
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    command: "yarn dev"
+    networks:
+      - tenet
+    ports:
+      - "8000:3333"
+    volumes:
+      - /usr/src/app/node_modules
+      - ./frontend:/usr/src/app
+    environment:
+      - API_BASE_URL=/api
+    env_file:
+      - ./frontend/.env
+    depends_on:
+      - backend
+  webserver:
+    restart: always
+    build:
+      context: ./http
+    networks:
+      - tenet
+    ports:
+      - "8080:80"
+    depends_on:
+      - frontend
+  postgres:
+    container_name: postgres_db
+    image: postgres
+    networks:
+      - tenet
+    environment:
+      POSTGRES_DB: app
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      PG_DATA: /var/lib/postgresql/data
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+    ports:
+      - "5332:5432"
+
+networks:
+  tenet:
+
+volumes:
+  dbdata:

@@ -227,7 +227,7 @@ describe('EventsController (e2e)', () => {
         .put(`/events/${event.id}`)
         .set('Accept', 'application/json')
         .set('Authorization', `Bearer ${token}`)
-        .send({ title: 'updated title' })
+        .send({ ...event, title: 'updated title' })
         .expect(HttpStatus.OK);
 
       expect(response.body.title).toEqual('updated title');
