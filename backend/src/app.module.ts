@@ -41,6 +41,11 @@ const ENVIRONMENT = process.env.NODE_ENV;
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE,
       entities: [Event, Category, User, Reservation],
+      migrations: ['dist/migrations/*.js'],
+      cli: {
+        migrationsDir: 'src/migrations',
+      },
+      migrationsRun: process.env.NODE_ENV === 'production',
       synchronize: process.env.NODE_ENV !== 'production',
     }),
     EventsModule,

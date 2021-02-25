@@ -1,8 +1,10 @@
 <template>
-  <div class="relative">
-    <Header />
-    <Nuxt />
-    <Footer />
+  <div class="relative flex flex-col">
+    <div class="content flex-auto">
+      <Header />
+      <Nuxt />
+    </div>
+    <Footer class="flex-shrink-0" />
   </div>
 </template>
 
@@ -24,6 +26,14 @@ html {
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
   box-sizing: border-box;
+}
+
+html,
+body,
+#__nuxt,
+#__layout,
+#__layout > * {
+  height: 100%;
 }
 
 *,
