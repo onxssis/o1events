@@ -1,4 +1,5 @@
 import { getConnection, MigrationInterface, QueryRunner } from 'typeorm';
+import * as bcrypt from 'bcrypt';
 import { User } from '@/users/entities/user.entity';
 
 export class CreateAdminUser1613674495706 implements MigrationInterface {
@@ -12,9 +13,10 @@ export class CreateAdminUser1613674495706 implements MigrationInterface {
           name: 'Admin User',
           email: 'admin@email.com',
           isAdmin: true,
-          password: 'password123',
+          password: bcrypt.hashSync('password', 10),
         },
-      ]);
+      ])
+      .execute();
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {

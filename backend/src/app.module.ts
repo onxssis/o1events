@@ -2,17 +2,18 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import * as Joi from '@hapi/joi';
+import * as dotenv from 'dotenv';
+
+dotenv.config();
 
 import { EventsModule } from './events/events.module';
 import { CategoriesModule } from './categories/categories.module';
 import { CommonModule } from './common/common.module';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
-import { Event } from './events/entities/event.entity';
-import { Category } from './categories/entities/category.entity';
-import { User } from './users/entities/user.entity';
-import { Reservation } from './reservations/entities/reservation.entity';
 import { ReservationsModule } from './reservations/reservations.module';
+
+import * as connectionOptions from './ormconfig';
 
 const ENVIRONMENT = process.env.NODE_ENV;
 
@@ -33,21 +34,7 @@ const ENVIRONMENT = process.env.NODE_ENV;
       }),
       cache: process.env.NODE_ENV === 'production',
     }),
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: process.env.DB_HOST,
-      port: +process.env.DB_PORT,
-      username: process.env.DB_USERNAME,
-      password: process.env.DB_PASSWORD,
-      database: process.env.DB_DATABASE,
-      entities: [Event, Category, User, Reservation],
-      migrations: ['dist/migrations/*.js'],
-      cli: {
-        migrationsDir: 'src/migrations',
-      },
-      migrationsRun: process.env.NODE_ENV === 'production',
-      synchronize: process.env.NODE_ENV !== 'production',
-    }),
+    TypeOrmModule.forRoot(connectionOptions),
     EventsModule,
     CategoriesModule,
     CommonModule,
