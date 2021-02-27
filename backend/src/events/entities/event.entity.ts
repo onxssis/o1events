@@ -8,10 +8,12 @@ import {
   OneToMany,
 } from 'typeorm';
 import slugify from 'slugify';
+import { Expose } from 'class-transformer';
 
 import { Category } from '@/categories/entities/category.entity';
 import { CoreEntity } from '@/common/entities/core.entity';
 import { Reservation } from '@/reservations/entities/reservation.entity';
+import { auth } from '@/common/helpers';
 
 export enum EventType {
   ONLINE = 'online',
@@ -76,6 +78,11 @@ export class Event extends CoreEntity {
     onDelete: 'CASCADE',
   })
   reservations: Reservation[];
+
+  @Expose()
+  get isAttending(): any {
+    return this.reservations.some((r) => r.user.id === auth().id);
+  }
 
   @BeforeInsert()
   @BeforeUpdate()
