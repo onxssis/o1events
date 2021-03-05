@@ -52,18 +52,11 @@
           +{{ data.reservations.length - 3 }}
         </p>
       </div>
-      <div class="fav ml-auto flex items-center">
-        <a
-          class="bg-primary font-medium tracking-wide text-white border border-primary hover:bg-primary-dark hover:border-primary-dark text-sm px-4 py-2 rounded-lg outline-none focus:outline-none cursor-pointer"
-          type="button"
-          style="transition: all 0.15s ease"
-        >
-          Attend
-        </a>
-        <!-- <button>
+      <!-- <div class="fav ml-auto flex items-center">
+        <button>
           <bookmark-icon />
-        </button> -->
-      </div>
+        </button>
+      </div> -->
     </div>
   </div>
 </template>

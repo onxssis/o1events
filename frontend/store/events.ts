@@ -1,4 +1,5 @@
 import { GetterTree, ActionTree, MutationTree } from 'vuex'
+import { IEvent } from '~/@types'
 
 export const EVENT_MUTATIONS = {
   SET_EVENT: 'SET_EVENT',
@@ -22,6 +23,28 @@ export const actions: ActionTree<RootState, RootState> = {
     const { data } = await this.$axios.get(`/events/${slug}`)
 
     commit(EVENT_MUTATIONS.SET_EVENT, data)
+  },
+
+  async attend(_, event: IEvent) {
+    const { data } = await this.$axios.post(`/reservations`, {
+      event: event.id,
+    })
+
+    if (data.ok) {
+      this.dispatch('events/get', event.slug)
+    }
+  },
+
+  async unattend(_, event: IEvent) {
+    const { data } = await this.$axios.delete(`/reservations`, {
+      data: {
+        event: event.id,
+      },
+    })
+
+    if (data.ok) {
+      this.dispatch('events/get', event.slug)
+    }
   },
 }
 

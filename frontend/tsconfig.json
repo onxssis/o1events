@@ -20,7 +20,8 @@
       "@nuxt/types",
       "@nuxtjs/axios",
       "@nuxtjs/auth-next",
-      "@types/googlemaps"
+      "@types/googlemaps",
+      "./types.d.ts"
     ]
   },
   "exclude": ["node_modules", ".nuxt", "dist"]

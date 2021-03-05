@@ -17,6 +17,7 @@ export default {
     '~/plugins/vue-ctk-datepicker',
     '~/plugins/vue-placeholders',
     '~/plugins/toastr',
+    { src: '~/plugins/vue-js-modal', mode: 'client' },
     { src: '~/plugins/google-maps', ssr: true },
   ],
 
@@ -31,7 +32,7 @@ export default {
   ],
 
   // Modules (https://go.nuxtjs.dev/config-modules)
-  modules: ['@nuxtjs/axios', '@nuxtjs/auth-next'],
+  modules: ['@nuxtjs/axios', '@nuxtjs/auth-next', 'portal-vue/nuxt'],
 
   axios: {
     baseURL: process.env.API_BASE_URL || 'http://localhost:3000', // Used as fallback if no runtime config is provided

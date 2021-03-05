@@ -1,9 +1,9 @@
 <template>
-  <fragment>
+  <div>
     <div class="w-full lg:max-w-mini xl:max-w-screen-xl mx-auto">
       <div class="p-0 lg:pt-4">
         <div
-          class="flex md:items-center justify-between bg-primary-lightest h-64 lg:h-80 rounded-b-2xl lg:rounded-2xl p-4 md:px-4 lg:px-14"
+          class="flex items-center justify-between bg-primary-lightest lg:h-80 rounded-b-2xl lg:rounded-2xl p-4 md:px-4 lg:px-14"
         >
           <div class="mt-8">
             <h1
@@ -15,12 +15,12 @@
               Starts @ <span class="text-yellow-700">{{ formattedDate }}</span>
             </span>
 
-            <button class="button px-8 py-3 mt-4 lg:mt-6">Attend</button>
+            <book-event :event="event"></book-event>
           </div>
 
           <button
             type="button"
-            class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            class="hidden md:inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
           >
             Share
           </button>
@@ -28,8 +28,9 @@
       </div>
     </div>
 
-    <div class="flex lg:max-w-mini xl:max-w-container mx-auto mt-2">
+    <div class="flex px-4 lg:max-w-mini xl:max-w-container mx-auto mt-2">
       <NuxtLink
+        v-if="canView"
         :to="`/events/edit/${event.slug}`"
         class="p-3 ml-auto text-royal-dark bg-transparent hover:bg-royal hover:text-white border-solid rounded-full border border-royal"
         title="Edit"
@@ -49,16 +50,16 @@
     </div>
 
     <div
-      class="grid grid-cols-1 lg:grid-cols-12 lg:max-w-mini xl:max-w-container mx-auto mt-6 lg:mt-8 xl:mt-18 pb-14"
+      class="grid grid-cols-1 lg:grid-cols-12 lg:max-w-mini xl:max-w-container mx-auto px-4 lg:px-0 mt-6 lg:mt-8 xl:mt-18 pb-14"
     >
-      <div class="col-span-7 mr-8">
+      <div class="col-span-7 mr-8 mb-8">
         <h3 class="text-2xl font-display font-semibold mb-4">Details</h3>
 
         <div class="text-base text-gray-700">
           {{ event.description }}
         </div>
       </div>
-      <div class="col-span-5 ml-16">
+      <div class="col-span-5 lg:ml-16">
         <event-time-card
           :start-date="formattedDate"
           :end-date="formattedEndDate"
@@ -99,15 +100,19 @@
         </div>
       </div>
     </div>
-  </fragment>
+    <div class="in-view h-px"></div>
+    <div class="bg-royal text-white fixed bottom-0 left-0 right-0">
+      MAKE ME STICKY
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
 import { Context } from '@nuxt/types'
 import { Component, Vue, namespace } from 'nuxt-property-decorator'
 import { Fragment } from 'vue-fragment'
+import BookEvent from '~/components/events/book-event.vue'
 import { IEvent } from '~/@types'
-import OnlineEventCard from '~/components/events/online-event-card.vue'
 import { formatDate } from '~/utils'
 
 const eventsStore = namespace('events')
@@ -116,7 +121,7 @@ const eventsStore = namespace('events')
   layout: 'default',
   components: {
     Fragment,
-    OnlineEventCard,
+    BookEvent,
   },
 })
 export default class EventPage extends Vue {
@@ -129,6 +134,10 @@ export default class EventPage extends Vue {
 
   get formattedEndDate() {
     return formatDate(this.event.endDate)
+  }
+
+  get canView() {
+    return this.$auth.loggedIn && this.$auth.user?.isAdmin
   }
 
   async fetch({ params, store }: Context) {

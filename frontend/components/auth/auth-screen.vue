@@ -2,7 +2,7 @@
   <fragment>
     <error-alert v-if="errors.length" :errors="errors" />
     <div
-      class="flex flex-col bg-white w-86 md:w-full mx-4 md:mx-0 md:shadow-md px-4 sm:px-6 md:px-8 lg:px-10 py-8 rounded-md max-w-md"
+      class="auth-screen flex flex-col bg-white w-86 md:w-full mx-4 md:mx-0 md:shadow-md px-4 sm:px-6 md:px-8 lg:px-10 py-8 rounded-md max-w-md"
     >
       <div
         class="font-medium font-display self-center text-xl sm:text-2xl text-gray-800"
