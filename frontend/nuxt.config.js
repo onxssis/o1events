@@ -18,6 +18,7 @@ export default {
     '~/plugins/vue-placeholders',
     '~/plugins/toastr',
     { src: '~/plugins/vue-js-modal', mode: 'client' },
+    { src: '~/plugins/paystack.client', mode: 'client' },
     { src: '~/plugins/google-maps', ssr: true },
   ],
 

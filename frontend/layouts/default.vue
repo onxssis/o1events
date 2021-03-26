@@ -6,7 +6,7 @@
     </div>
     <Footer class="flex-shrink-0" />
     <portal-target name="modal" />
-    <auth-modal></auth-modal>
+    <!-- <auth-modal></auth-modal> -->
   </div>
 </template>
 

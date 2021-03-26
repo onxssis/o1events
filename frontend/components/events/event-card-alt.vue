@@ -40,6 +40,7 @@
             />
           </div>
           <default-avatar
+            :initials="reservation.user.initials"
             v-if="!reservation.user.avatar"
             class="shadow border-2 border-white"
             :class="{ '-ml-2': index !== 0 }"

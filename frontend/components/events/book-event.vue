@@ -1,38 +1,61 @@
 <template>
-  <button
-    class="button px-12 py-4 rounded-xl mt-4 lg:mt-6"
-    :class="{ 'bg-red-500 hover:bg-red-600': isAttending }"
-    @click="makeReservation"
-  >
-    <svg
-      v-if="reserving"
-      class="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-      xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      viewBox="0 0 24 24"
+  <div>
+    <button
+      v-if="isFreeEvent || !$auth.loggedIn || isAttending"
+      class="button px-12 py-4 rounded-xl mt-4 lg:mt-6"
+      :class="{ 'bg-red-500 hover:bg-red-600': isAttending }"
+      @click="makeReservation"
     >
-      <circle
-        class="opacity-25"
-        cx="12"
-        cy="12"
-        r="10"
-        stroke="currentColor"
-        stroke-width="4"
-      ></circle>
-      <path
-        class="opacity-75"
-        fill="currentColor"
-        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-      ></path>
-    </svg>
+      <svg
+        v-if="reserving"
+        class="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+      >
+        <circle
+          class="opacity-25"
+          cx="12"
+          cy="12"
+          r="10"
+          stroke="currentColor"
+          stroke-width="4"
+        ></circle>
+        <path
+          class="opacity-75"
+          fill="currentColor"
+          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+        ></path>
+      </svg>
 
-    <span v-if="reserving" class="loading">{{ reservingText }}</span>
-    <span v-if="!reserving">{{ isAttending ? 'Unsubscribe' : 'Attend' }}</span>
-  </button>
+      <span v-if="reserving" class="loading">{{ reservingText }}</span>
+      <span v-if="!reserving && isAttending">Unsubscribe</span>
+      <span v-if="!reserving && !isAttending && isFreeEvent">Attend</span>
+      <span v-if="!reserving && !isFreeEvent && !isAttending"
+        >Pay &#8358; {{ event.price }}</span
+      >
+    </button>
+    <client-only>
+      <paystack
+        v-if="!isFreeEvent && $auth.loggedIn && !isAttending"
+        class="button bg-green-500 px-12 py-4 rounded-xl mt-4 lg:mt-6"
+        :amount="amount"
+        :email="email"
+        :paystackkey="paystackkey"
+        :reference="reference"
+        :callback="callback"
+        :close="close"
+        :embed="false"
+      >
+        Pay &#8358;{{ event.price }}
+      </paystack>
+    </client-only>
+  </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'nuxt-property-decorator'
+import AuthModal from '../auth/auth-modal'
 import { IEvent } from '~/@types'
 
 @Component({})
@@ -45,15 +68,44 @@ export default class BookEvent extends Vue {
 
   interval = null
 
+  ref = ''
+
+  paystackkey = 'pk_test_2a518a7f26c72514f02d81099cd326157ee71339'
+  email = this.$auth.user?.email // Customer email
+  amount = this.event.price * 100 // in kobo
+
   get isAttending() {
     const user = this.$auth.user
-
-    // return false
 
     return (
       this.$auth.loggedIn &&
       this.event.reservations.some((r) => r.user.email === user?.email)
     )
+  }
+
+  get isFreeEvent() {
+    return this.event.price === 0
+  }
+
+  get reference() {
+    let text = ''
+    const possible =
+      'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+
+    for (let i = 0; i < 10; i++)
+      text += possible.charAt(Math.floor(Math.random() * possible.length))
+
+    this.ref = text
+
+    return text
+  }
+
+  callback(response: any) {
+    console.log('RES', response)
+  }
+
+  close() {
+    console.log('payment closed')
   }
 
   getReservingText() {
@@ -81,7 +133,11 @@ export default class BookEvent extends Vue {
     if (this.$auth.loggedIn) {
       return true
     } else {
-      this.$modal.show('auth')
+      this.$modal.show(
+        AuthModal,
+        { redirectPath: this.$route.path },
+        { draggable: true }
+      )
       return false
     }
   }

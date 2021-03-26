@@ -14,6 +14,7 @@ export interface IUser extends BaseModel {
   email: string
   isAdmin: boolean
   avatar: string
+  initials: string
 }
 
 export interface IEvent extends BaseModel {

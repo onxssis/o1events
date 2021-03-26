@@ -140,6 +140,7 @@ const AuthScreenType = {
 })
 export default class AuthScreen extends Vue {
   @Prop({ default: AuthScreenType.login }) readonly screen!: string
+  @Prop({ default: '' }) readonly redirectTo!: string
 
   form = {
     name: '',
@@ -189,7 +190,14 @@ export default class AuthScreen extends Vue {
     }
 
     try {
+      if (this.redirectTo !== '') {
+        this.$auth.$storage.setUniversal('redirect', this.redirectTo)
+      }
+
       await this.$auth.loginWith('local', { data: payload })
+
+      this.clearForm()
+      this.$modal.hideAll()
     } catch (e) {
       this.handleError(e)
     }
@@ -203,6 +211,12 @@ export default class AuthScreen extends Vue {
     } else {
       this.errors = ['An unexpected error occured. Please try again!']
     }
+  }
+
+  clearForm() {
+    this.form.name = ''
+    this.form.email = ''
+    this.form.password = ''
   }
 }
 </script>

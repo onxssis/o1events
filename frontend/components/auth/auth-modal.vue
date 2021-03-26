@@ -1,40 +1,27 @@
 <template>
-  <portal to="modal">
-    <modal name="auth" class="auth-modal" height="auto">
-      <auth-screen></auth-screen>
-    </modal>
-  </portal>
+  <auth-screen :redirect-to="redirectPath"></auth-screen>
 </template>
 
 <script>
-// export default {
-//   data() {
-//     return {
-//       oldRedirects: {},
-//     }
-//   },
-//   mounted() {
-//     this.oldRedirects = {
-//       home: this.$auth.options.redirect.home,
-//     }
-
-//     this.$auth.options.redirect.home = false
-//   },
-
-//   beforeDestroy() {
-//     Object.assign(this.$auth.options.redirect, this.oldRedirects)
-//   },
-// }
+export default {
+  props: {
+    redirectPath: {
+      type: String,
+      default: '',
+    },
+  },
+}
 </script>
 
 <style>
-.auth-modal .auth-screen {
+.auth-screen {
   max-width: none;
   width: auto;
 }
 
-.auth-modal .vm--modal {
+.vm--modal {
   border-radius: 0.5rem;
   width: auto;
+  height: unset !important;
 }
 </style>
