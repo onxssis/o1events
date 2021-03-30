@@ -12,6 +12,7 @@ import { CommonModule } from './common/common.module';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { ReservationsModule } from './reservations/reservations.module';
+import { PaymentsModule } from './payments/payments.module';
 
 import * as connectionOptions from './ormconfig';
 
@@ -31,6 +32,7 @@ const ENVIRONMENT = process.env.NODE_ENV;
         DB_PORT: Joi.required(),
         JWT_PRIVATE_KEY: Joi.required(),
         JWT_ACCESS_TOKEN_EXPIRATION: Joi.required(),
+        PAYSTACK_SECRET_KEY: Joi.required(),
       }),
       cache: process.env.NODE_ENV === 'production',
     }),
@@ -41,6 +43,7 @@ const ENVIRONMENT = process.env.NODE_ENV;
     UsersModule,
     AuthModule,
     ReservationsModule,
+    PaymentsModule,
   ],
 })
 export class AppModule {}

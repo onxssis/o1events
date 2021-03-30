@@ -28,7 +28,7 @@ export class User extends CoreEntity {
   @Expose()
   get initials(): string {
     const halves = this.name.split(' ');
-    return `${halves[0][0]}${halves[1][0]}`;
+    return `${halves[0][0].toUpperCase()}${halves[1][0].toUpperCase()}`;
   }
 
   @BeforeInsert()

@@ -52,6 +52,10 @@ export default {
     },
   },
 
+  env: {
+    paystackPubKey: process.env.PAYSTACK_PUBLIC_KEY,
+  },
+
   loading: { color: '#9818d6', throttle: 0 },
 
   router: {

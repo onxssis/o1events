@@ -4,6 +4,7 @@
       v-if="isFreeEvent || !$auth.loggedIn || isAttending"
       class="button px-12 py-4 rounded-xl mt-4 lg:mt-6"
       :class="{ 'bg-red-500 hover:bg-red-600': isAttending }"
+      :disabled="reserving"
       @click="makeReservation"
     >
       <svg
@@ -38,16 +39,19 @@
     <client-only>
       <paystack
         v-if="!isFreeEvent && $auth.loggedIn && !isAttending"
-        class="button bg-green-500 px-12 py-4 rounded-xl mt-4 lg:mt-6"
+        class="button px-12 py-4 rounded-xl mt-4 lg:mt-6"
         :amount="amount"
         :email="email"
         :paystackkey="paystackkey"
-        :reference="reference"
+        :reference="ref"
         :callback="callback"
         :close="close"
         :embed="false"
+        :metadata="{ event: event.id }"
+        :disabled="reserving"
       >
-        Pay &#8358;{{ event.price }}
+        <span v-if="reserving" class="loading">{{ reservingText }}</span>
+        <span v-else>Pay &#8358; {{ event.price }}</span>
       </paystack>
     </client-only>
   </div>
@@ -55,7 +59,7 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'nuxt-property-decorator'
-import AuthModal from '../auth/auth-modal'
+import AuthModal from '../auth/auth-modal.vue'
 import { IEvent } from '~/@types'
 
 @Component({})
@@ -70,7 +74,7 @@ export default class BookEvent extends Vue {
 
   ref = ''
 
-  paystackkey = 'pk_test_2a518a7f26c72514f02d81099cd326157ee71339'
+  paystackkey = process.env.paystackPubKey
   email = this.$auth.user?.email // Customer email
   amount = this.event.price * 100 // in kobo
 
@@ -92,20 +96,35 @@ export default class BookEvent extends Vue {
     const possible =
       'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
 
-    for (let i = 0; i < 10; i++)
+    for (let i = 0; i < 10; i++) {
       text += possible.charAt(Math.floor(Math.random() * possible.length))
-
-    this.ref = text
-
+    }
     return text
   }
 
-  callback(response: any) {
-    console.log('RES', response)
+  async callback(response: any) {
+    this.getReservingText()
+    this.reserving = true
+
+    try {
+      const { data } = await this.$axios.post('/payments/verify', {
+        transactionRef: response.trxref,
+        event: this.event.id,
+      })
+
+      if (data.ok) {
+        await this.makeReservation()
+        this.$toast.success('Reservation booked successfully')
+      }
+    } catch (e) {
+      this.$toast.error(e.response.message)
+    } finally {
+      this.reserving = false
+    }
   }
 
   close() {
-    console.log('payment closed')
+    this.ref = this.reference
   }
 
   getReservingText() {
@@ -122,8 +141,7 @@ export default class BookEvent extends Vue {
       this.getReservingText()
       this.reserving = true
 
-      const result = await this.$store.dispatch(action, this.event)
-      console.log(result)
+      await this.$store.dispatch(action, this.event)
 
       this.reserving = false
     }
@@ -140,6 +158,10 @@ export default class BookEvent extends Vue {
       )
       return false
     }
+  }
+
+  mounted() {
+    this.ref = this.reference
   }
 }
 </script>

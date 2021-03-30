@@ -1,9 +1,5 @@
 import { join } from 'path';
 import { ConnectionOptions } from 'typeorm';
-import { Category } from '@/categories/entities/category.entity';
-import { Event } from '@/events/entities/event.entity';
-import { User } from '@/users/entities/user.entity';
-import { Reservation } from '@/reservations/entities/reservation.entity';
 
 const PROD_ENV = 'production';
 
@@ -22,8 +18,8 @@ const connectionOptions: ConnectionOptions = {
   username: config.user,
   password: config.password,
   database: config.database,
-  entities: [Event, Category, User, Reservation],
-  synchronize: false,
+  entities: [join(__dirname, '**/entities/*{.ts,.js}')],
+  synchronize: process.env.NODE_ENV !== PROD_ENV,
   migrationsRun: process.env.NODE_ENV === PROD_ENV,
   logging: ['warn', 'error'],
   logger: process.env.NODE_ENV === PROD_ENV ? 'file' : 'debug',
