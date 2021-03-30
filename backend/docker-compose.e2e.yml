@@ -29,7 +29,7 @@ services:
 
   postgres:
     container_name: postgres
-    image: postgres
+    image: postgis/postgis:13-master
     networks:
       - testnet
     environment:

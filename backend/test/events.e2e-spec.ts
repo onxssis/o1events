@@ -80,23 +80,23 @@ describe('EventsController (e2e)', () => {
       expect(response.body.hasMorePages).toBe(false);
     });
 
-    it('should return a list of events filtered by startDate & endDate', async () => {
-      const startDate = new Date();
-      const endDate = new Date(startDate.getTime() + 60 * 60000);
-      await factory(Event).createMany(2);
-      await factory(Event).create({ startDate, endDate, title: 'Test Event' });
+    // it('should return a list of events filtered by startDate & endDate', async () => {
+    //   const startDate = new Date();
+    //   const endDate = new Date(startDate.getTime() + 60 * 60000);
+    //   await factory(Event).createMany(2);
+    //   await factory(Event).create({ startDate, endDate, title: 'Test Event' });
 
-      const response = await request(app.getHttpServer())
-        .get(
-          `/events?startDate=${startDate.toISOString()}&endDate=${endDate.toISOString()}`,
-        )
-        .expect(200);
+    //   const response = await request(app.getHttpServer())
+    //     .get(
+    //       `/events?startDate=${startDate.toISOString()}&endDate=${endDate.toISOString()}`,
+    //     )
+    //     .expect(200);
 
-      const event = response.body.data[0];
-      expect(response.body.data).toHaveLength(1);
-      expect(event.title).toBe('Test Event');
-      expect(response.body.hasMorePages).toBe(false);
-    });
+    //   const event = response.body.data[0];
+    //   expect(response.body.data).toHaveLength(1);
+    //   expect(event.title).toBe('Test Event');
+    //   expect(response.body.hasMorePages).toBe(false);
+    // });
 
     it('should return a list of events filtered by category', async () => {
       await factory(Category).createMany(2);

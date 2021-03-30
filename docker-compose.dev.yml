@@ -46,7 +46,7 @@ services:
       - frontend
   postgres:
     container_name: postgres_db
-    image: postgres
+    image: postgis/postgis:13-master
     networks:
       - tenet
     environment:
