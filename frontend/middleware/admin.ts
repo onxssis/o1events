@@ -3,7 +3,7 @@ import { Middleware } from '@nuxt/types'
 
 const isAdminMiddleware: Middleware = ({ store, redirect }) => {
   const isLoggedIn = store.$auth.loggedIn
-  const isAdmin = store.$auth.user?.is_admin
+  const isAdmin = store.$auth.user?.isAdmin
 
   if (isLoggedIn === false || isAdmin === false) {
     return redirect('/login')

@@ -3,8 +3,10 @@ import {
   BeforeUpdate,
   Column,
   Entity,
+  JoinColumn,
   JoinTable,
   ManyToMany,
+  ManyToOne,
   OneToMany,
 } from 'typeorm';
 import slugify from 'slugify';
@@ -14,13 +16,14 @@ import { Category } from '@/categories/entities/category.entity';
 import { CoreEntity } from '@/common/entities/core.entity';
 import { Reservation } from '@/reservations/entities/reservation.entity';
 import { auth } from '@/common/helpers';
+import { User } from '@/users/entities/user.entity';
 
 export enum EventType {
   ONLINE = 'online',
   PERSON = 'person',
 }
 
-@Entity()
+@Entity({ name: 'events' })
 export class Event extends CoreEntity {
   @Column()
   title: string;
@@ -69,6 +72,10 @@ export class Event extends CoreEntity {
   @Column({ nullable: true })
   link?: string;
 
+  @ManyToOne(() => User, (user) => user.events, { nullable: true })
+  @JoinColumn({ name: 'organizer_id' })
+  organizer: User;
+
   @ManyToMany(() => Category, { onDelete: 'CASCADE' })
   @JoinTable()
   categories: Category[];
@@ -81,7 +88,7 @@ export class Event extends CoreEntity {
 
   @Expose()
   get isAttending(): any {
-    return this.reservations.some((r) => r.user.id === auth().id);
+    return this.reservations?.some((r) => r.user.id === auth().id);
   }
 
   @BeforeInsert()

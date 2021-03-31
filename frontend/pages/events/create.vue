@@ -20,7 +20,7 @@ import { Vue, Component } from 'nuxt-property-decorator'
 
 @Component({
   layout: 'default',
-  middleware: ['auth', 'admin'],
+  middleware: ['auth'],
 })
 export default class CreateEventPage extends Vue {}
 </script>

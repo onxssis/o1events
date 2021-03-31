@@ -17,6 +17,7 @@ import {
 } from '@/common/dto/pagination.dto';
 import { Category } from '@/categories/entities/category.entity';
 import { FilterQueryDto } from '@/common/dto/filter.dto';
+import { auth } from '@/common/helpers';
 
 @EntityRepository(Event)
 export class EventRepository implements IEventRepository {
@@ -88,15 +89,24 @@ export class EventRepository implements IEventRepository {
   }
 
   async findOne(id: number) {
-    return this.repo.findOneOrFail(id, { relations: ['categories'] });
+    return this.repo.findOneOrFail(id, {
+      relations: ['categories', 'organizer'],
+    });
   }
 
   async findOneBySlug(slug: string) {
-    return this.repo.findOneOrFail({ slug }, { relations: ['categories'] });
+    return this.repo.findOneOrFail(
+      { slug },
+      { relations: ['categories', 'organizer'] },
+    );
   }
 
   async create(createEventDto: CreateEventDto, categories: Category[]) {
-    const event = this.repo.create({ ...createEventDto, categories });
+    const event = this.repo.create({
+      ...createEventDto,
+      categories,
+      organizer: auth(),
+    });
 
     return this.repo.save(event);
   }

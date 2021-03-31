@@ -133,7 +133,7 @@ describe('EventsService', () => {
       ...createEventArgs,
       title: 'update',
     });
-    eventRepository.findOne.mockReturnValue({});
+    eventRepository.findOne.mockReturnValue({ organizer: { id: 3 } });
 
     const event = await service.update(1, createEventArgs);
 

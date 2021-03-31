@@ -10,6 +10,8 @@ import {
   NotFoundException,
   Query,
   UseInterceptors,
+  UseGuards,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { EventsService } from './events.service';
 import { CreateEventDto } from './dto/create-event.dto';
@@ -19,8 +21,8 @@ import {
   PaginationQueryDto,
 } from '@/common/dto/pagination.dto';
 import { FilterQueryDto } from '@/common/dto/filter.dto';
-import { AdminRoute } from '@/common/decorators/admin-route.decorator';
 import { EntityCollectionSerializer } from '@/common/interceptors/serializer.interceptor';
+import { AuthGuard } from '@/auth/guards/jwt.guard';
 
 @Controller('events')
 @UseInterceptors(EntityCollectionSerializer)
@@ -28,7 +30,7 @@ export class EventsController {
   constructor(private readonly eventsService: EventsService) {}
 
   @Post()
-  @AdminRoute()
+  @UseGuards(AuthGuard)
   async create(@Body() createEventDto: CreateEventDto) {
     try {
       const event = await this.eventsService.create(createEventDto);
@@ -77,7 +79,7 @@ export class EventsController {
   }
 
   @Put(':id')
-  @AdminRoute()
+  @UseGuards(AuthGuard)
   async update(
     @Param('id') id: string,
     @Body() updateEventDto: UpdateEventDto,
@@ -90,7 +92,7 @@ export class EventsController {
   }
 
   @Delete(':id')
-  @AdminRoute()
+  @UseGuards(AuthGuard)
   remove(@Param('id') id: string) {
     return this.eventsService.remove(+id);
   }

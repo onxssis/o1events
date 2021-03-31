@@ -28,11 +28,7 @@
             v-if="$auth.loggedIn && $auth.user"
             class="auth flex items-center"
           >
-            <button
-              v-if="$auth.user.isAdmin"
-              class="button md:px-4"
-              @click.prevent="createEvent"
-            >
+            <button class="button md:px-4" @click.prevent="createEvent">
               Create Event
             </button>
             <button

@@ -53,5 +53,5 @@ export class CreateEventDto {
   readonly endDate: Date | string;
 
   @IsArray()
-  readonly categories: any[];
+  readonly categories: any[] = [];
 }

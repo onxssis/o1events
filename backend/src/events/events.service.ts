@@ -4,7 +4,8 @@ import {
   PaginatedResultDto,
   PaginationQueryDto,
 } from '@/common/dto/pagination.dto';
-import { Inject, Injectable } from '@nestjs/common';
+import { auth } from '@/common/helpers';
+import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { CreateEventDto } from './dto/create-event.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
 import { IEventRepository } from './repositories/event.repository';
@@ -42,6 +43,12 @@ export class EventsService {
   }
 
   async update(id: number, updateEventDto: UpdateEventDto) {
+    const event = await this.findOne(id);
+
+    // if (event.organizer.id !== auth().id) {
+    //   throw new UnauthorizedException();
+    // }
+
     const categories = await this.categoryService.findByIds(
       updateEventDto.categories,
     );

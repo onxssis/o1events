@@ -4,8 +4,9 @@ import * as bcrypt from 'bcrypt';
 import { CoreEntity } from '@/common/entities/core.entity';
 import { Reservation } from '@/reservations/entities/reservation.entity';
 import { Exclude, Expose } from 'class-transformer';
+import { Event } from '@/events/entities/event.entity';
 
-@Entity()
+@Entity({ name: 'users' })
 export class User extends CoreEntity {
   @Column()
   name: string;
@@ -19,6 +20,9 @@ export class User extends CoreEntity {
 
   @Column({ default: false, name: 'is_admin' })
   isAdmin: boolean;
+
+  @OneToMany(() => Event, (event) => event.organizer)
+  events: Event[];
 
   @OneToMany(() => Reservation, (reservation) => reservation.user, {
     onDelete: 'CASCADE',

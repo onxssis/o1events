@@ -9,6 +9,7 @@
               <div class="col-span-3">
                 <base-input
                   v-model="dto.name"
+                  class="mb-4"
                   label="Name"
                   name="name"
                   placeholder="Name of the category/tag"
