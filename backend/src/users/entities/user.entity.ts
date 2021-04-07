@@ -6,7 +6,7 @@ import { Reservation } from '@/reservations/entities/reservation.entity';
 import { Exclude, Expose } from 'class-transformer';
 import { Event } from '@/events/entities/event.entity';
 
-@Entity({ name: 'users' })
+@Entity()
 export class User extends CoreEntity {
   @Column()
   name: string;
@@ -18,7 +18,7 @@ export class User extends CoreEntity {
   @Exclude()
   password: string;
 
-  @Column({ default: false, name: 'is_admin' })
+  @Column({ default: false })
   isAdmin: boolean;
 
   @OneToMany(() => Event, (event) => event.organizer)

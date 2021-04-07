@@ -18,7 +18,7 @@ const eventsStore = namespace('events')
 
 @Component({
   layout: 'default',
-  middleware: ['auth', 'admin'],
+  middleware: ['auth'],
   components: {
     Fragment,
   },

@@ -2,7 +2,7 @@ import { BeforeInsert, BeforeUpdate, Column, Entity } from 'typeorm';
 import slugify from 'slugify';
 import { CoreEntity } from '@/common/entities/core.entity';
 
-@Entity({ name: 'categories' })
+@Entity()
 export class Category extends CoreEntity {
   @Column()
   name: string;

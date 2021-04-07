@@ -14,8 +14,9 @@
               <span class="pr-1 pl-1">online</span>
             </div>
             <img
-              src="https://picsum.photos/150/100"
+              :src="event.cover ? event.cover : 'https://picsum.photos/150/100'"
               class="rounded-lg"
+              width="150"
               alt=""
             />
           </div>

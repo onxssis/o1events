@@ -137,7 +137,9 @@ export default class EventPage extends Vue {
   }
 
   get canView() {
-    return this.$auth.loggedIn && this.$auth.user?.isAdmin
+    return (
+      this.$auth.loggedIn && this.$auth.user?.id === this.event.organizer.id
+    )
   }
 
   async fetch({ params, store }: Context) {

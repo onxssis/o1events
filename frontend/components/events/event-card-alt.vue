@@ -1,18 +1,29 @@
 <template>
   <div
-    class="card flex flex-col relative py-3 border rounded-lg break-words hover:shadow-lg cursor-pointer"
+    class="card flex flex-col relative pb-3 border rounded-lg break-words hover:shadow-lg cursor-pointer"
     @click="$router.push(`/events/${data.slug}`)"
   >
-    <div class="head px-3 bg-white flex items-center justify-between">
+    <div class="relative">
       <div
-        v-if="isOnlineEvent"
-        class="border border-gray-500 flex items-center bg-white text-xs p-1 py-px rounded-md"
+        class="head flex items-center justify-between absolute left-0 right-0"
       >
-        <dot />
-        <span class="pr-1 pl-1">online event</span>
-      </div>
+        <div
+          v-if="isOnlineEvent"
+          class="border border-gray-500 flex items-center bg-white text-xs p-1 mt-1 mx-1 py-px rounded-md"
+        >
+          <dot />
+          <span class="pr-1 pl-1">online event</span>
+        </div>
 
-      <span class="font-medium ml-auto">${{ data.price }}</span>
+        <span class="font-medium ml-auto bg-white">${{ data.price }}</span>
+      </div>
+      <div>
+        <img
+          class="rounded-t-lg w-full"
+          :src="data.cover"
+          :alt="data.title + ' cover'"
+        />
+      </div>
     </div>
     <div class="mid px-3 pt-6">
       <p class="uppercase text-sm mb-2 text-yellow-700">
@@ -26,7 +37,7 @@
       </p>
     </div>
     <div class="bottom px-3 mt-auto flex justify-between items-center">
-      <div v-if="hasReservations" class="flex items-center w-full">
+      <div v-if="hasReservations" class="flex items-center w-full mt-4">
         <div v-for="(reservation, index) in reservations" :key="reservation.id">
           <div
             v-if="reservation.user.avatar"
@@ -40,8 +51,8 @@
             />
           </div>
           <default-avatar
-            :initials="reservation.user.initials"
             v-if="!reservation.user.avatar"
+            :initials="reservation.user.initials"
             class="shadow border-2 border-white"
             :class="{ '-ml-2': index !== 0 }"
           />

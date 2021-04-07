@@ -143,6 +143,19 @@
                   Cover
                 </label>
 
+                <div v-if="previewImageSrc" class="ml-auto">
+                  <div
+                    class="shadow border-2 border-white rounded w-auto h-auto"
+                  >
+                    <img
+                      ref="previewImage"
+                      class="w-full h-full overflow-hidden object-cover rounded"
+                      :src="previewImageSrc"
+                      alt="event cover preview"
+                    />
+                  </div>
+                </div>
+
                 <!-- <div class="shadow border-2 border-white rounded w-40 h-auto">
                   <img
                     class="w-full h-full overflow-hidden object-cover rounded"
@@ -164,9 +177,10 @@
                     >
                       Choose
                       <input
+                        ref="file"
                         class="absolute w-full block top-0 left-0 opacity-0 cursor-pointer"
                         type="file"
-                        @change="uploadCover"
+                        @change="handleUpload"
                       />
                     </label>
                   </div>
@@ -262,8 +276,11 @@ export default class EventForm extends mixins(ResourceFormMixin) {
 
   async submitForm() {
     try {
-      const form = this.filterForm()
+      if (this.file !== '') {
+        await this.uploadCover()
+      }
 
+      const form = this.filterForm()
       const method = this.isEditing ? 'put' : 'post'
       const url = this.isEditing ? `/events/${this.event?.id}` : '/events'
       const message = this.isEditing ? 'updated' : 'created'

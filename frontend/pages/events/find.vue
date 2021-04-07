@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="px-4 lg:px-0 max-w-mini xl:max-w-screen-lg mx-auto">
+    <div class="px-4 py-14 lg:px-0 max-w-mini xl:max-w-screen-lg mx-auto">
       <div class="mb-8">
         <div class="flex items-center">
           <event-filter />

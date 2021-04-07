@@ -9,7 +9,7 @@ import { Event } from '@/events/entities/event.entity';
 import { User } from '@/users/entities/user.entity';
 import { Exclude } from 'class-transformer';
 
-@Entity({ name: 'reservations' })
+@Entity()
 @Index(['userId', 'eventId'], { unique: true })
 export class Reservation {
   @PrimaryGeneratedColumn()

@@ -6,13 +6,14 @@ class ResourceFormMixin extends Vue {
   dto: any = undefined
   uploading = false
   uploadPreset = ''
+  file = ''
+  previewImageSrc = ''
 
-  async uploadCover(e: any) {
+  async uploadCover() {
     this.uploading = true
 
-    const files = e.target.files
     const form = new FormData()
-    form.append('file', files[0])
+    form.append('file', this.file)
     form.append('upload_preset', this.uploadPreset)
 
     const response = await fetch(
@@ -26,6 +27,22 @@ class ResourceFormMixin extends Vue {
 
     this.uploading = false
     this.dto.cover = file.secure_url
+  }
+
+  handleUpload() {
+    const file = (this.$refs.file as HTMLFormElement).files[0]
+
+    this.previewImage(file)
+    this.file = file
+  }
+
+  previewImage(file: Blob) {
+    const reader = new FileReader()
+
+    reader.onload = () => {
+      this.previewImageSrc = reader.result as string
+    }
+    reader.readAsDataURL(file)
   }
 
   onSubmitError(error: any) {

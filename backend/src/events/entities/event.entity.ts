@@ -23,7 +23,7 @@ export enum EventType {
   PERSON = 'person',
 }
 
-@Entity({ name: 'events' })
+@Entity()
 export class Event extends CoreEntity {
   @Column()
   title: string;
@@ -51,14 +51,12 @@ export class Event extends CoreEntity {
 
   @Column({
     type: 'timestamp',
-    name: 'start_date',
     default: 'NOW()',
   })
   startDate: Date;
 
   @Column({
     type: 'timestamp',
-    name: 'end_date',
     default: 'NOW()',
   })
   endDate: Date;
@@ -73,7 +71,6 @@ export class Event extends CoreEntity {
   link?: string;
 
   @ManyToOne(() => User, (user) => user.events, { nullable: true })
-  @JoinColumn({ name: 'organizer_id' })
   organizer: User;
 
   @ManyToMany(() => Category, { onDelete: 'CASCADE' })

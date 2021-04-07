@@ -31,6 +31,7 @@ export interface IEvent extends BaseModel {
   price: number
   type: EventType
   categories: any[]
+  organizer: IUser
   reservations: [
     {
       id: string

@@ -32,6 +32,7 @@ export class ReservationsController {
 
       return response;
     } catch (e) {
+      console.log(e);
       throw new HttpException('An error occured', HttpStatus.BAD_REQUEST);
     }
   }

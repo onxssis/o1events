@@ -40,6 +40,10 @@ export class CreateEventDto {
   readonly link?: string;
 
   @IsOptional()
+  @IsUrl()
+  readonly cover?: string;
+
+  @IsOptional()
   @IsNumber()
   readonly price?: number;
 
