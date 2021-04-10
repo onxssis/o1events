@@ -1,0 +1,9 @@
+{
+  "name": "o1events",
+  "version": "1.0.0",
+  "author": "onassis <onxssis@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "start:dev": "docker-compose -f docker-compose.dev.yml up -d --build"
+  }
+}

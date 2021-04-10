@@ -80,3 +80,7 @@ typings/
 
 # vscode config
 .vscode/settings.json
+
+.DS_Store
+
+docker-compose.override.yml
