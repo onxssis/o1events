@@ -5,7 +5,7 @@
         <div class="flex">
           <div class="flex-shrink-0 flex items-center">
             <h1 class="font-display">
-              <NuxtLink to="/">EventsGalore</NuxtLink>
+              <NuxtLink to="/">{{ $constants.appName }}</NuxtLink>
             </h1>
           </div>
         </div>
